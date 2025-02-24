@@ -2,29 +2,24 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>My Three.js Landing Page</title>
-  <!-- Link to your stylesheet -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>My 3D Website</title>
   <link rel="stylesheet" href="style.css" />
-  <!-- Three.js CDN (r152 at time of writing) -->
+  <!-- Include Three.js from a CDN -->
   <script src="https://cdn.jsdelivr.net/npm/three@0.152.0/build/three.min.js"></script>
 </head>
 <body>
-
-  <!-- 
-    Container for the 3D scene. The canvas from Three.js will be appended here.
-    You can absolutely position other elements over it. 
-  -->
+  <!-- Container for the Three.js scene -->
   <div id="three-container"></div>
 
-  <!-- Example overlay content -->
-  <header class="overlay-content">
-    <h1>Welcome to Namkha Yolo's Site</h1>
-    <p>A 3D-powered landing page built with Three.js</p>
-    <button>Get Started</button>
-  </header>
+  <!-- Overlay HTML content -->
+  <div class="overlay">
+    <h1>Welcome to My 3D Website</h1>
+    <p>Experience an interactive 3D design powered by Three.js.</p>
+    <button>Explore Now</button>
+  </div>
 
-  <!-- Main script for Three.js logic -->
+  <!-- Main JavaScript file -->
   <script src="script.js"></script>
 </body>
 </html>
