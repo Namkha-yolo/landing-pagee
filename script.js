@@ -1,56 +1,89 @@
-// Grab the container where we'll place the canvas
+// Get the container where the renderer will attach its canvas
 const container = document.getElementById('three-container');
 
-// 1. CREATE SCENE
+// Create the scene
 const scene = new THREE.Scene();
+scene.background = new THREE.Color(0x000000); // Black background
 
-// 2. CREATE CAMERA
-// PerspectiveCamera(fov, aspect, near, far)
+// Set up the camera
 const camera = new THREE.PerspectiveCamera(
   75,
   window.innerWidth / window.innerHeight,
   0.1,
   1000
 );
-camera.position.set(0, 0, 40); // Move the camera back so we can see the object
+camera.position.z = 50; // Move the camera back
 
-// 3. CREATE RENDERER
+// Create the WebGL renderer and add it to the container
 const renderer = new THREE.WebGLRenderer({ antialias: true });
-// Make sure the renderer covers the container's size
 renderer.setSize(window.innerWidth, window.innerHeight);
-// Append canvas to the container
 container.appendChild(renderer.domElement);
 
-// 4. ADD A LIGHT
+// Add ambient and directional light
 const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
 scene.add(ambientLight);
 
-const pointLight = new THREE.PointLight(0xffffff, 1);
-pointLight.position.set(10, 20, 20);
-scene.add(pointLight);
+const directionalLight = new THREE.DirectionalLight(0xffffff, 1);
+directionalLight.position.set(50, 50, 50);
+scene.add(directionalLight);
 
-// 5. CREATE A GEOMETRY & MESH (Example: rotating torus)
-const geometry = new THREE.TorusGeometry(10, 3, 16, 100);
-const material = new THREE.MeshStandardMaterial({ color: 0xff6347 });
-const torus = new THREE.Mesh(geometry, material);
+// Create a rotating cube
+const cubeGeometry = new THREE.BoxGeometry(10, 10, 10);
+const cubeMaterial = new THREE.MeshStandardMaterial({ color: 0xff4444 });
+const cube = new THREE.Mesh(cubeGeometry, cubeMaterial);
+cube.position.x = -20;
+scene.add(cube);
+
+// Create a rotating sphere
+const sphereGeometry = new THREE.SphereGeometry(5, 32, 32);
+const sphereMaterial = new THREE.MeshStandardMaterial({ color: 0x44ff44 });
+const sphere = new THREE.Mesh(sphereGeometry, sphereMaterial);
+sphere.position.x = 20;
+scene.add(sphere);
+
+// Create a rotating torus
+const torusGeometry = new THREE.TorusGeometry(7, 2, 16, 100);
+const torusMaterial = new THREE.MeshStandardMaterial({ color: 0x4444ff });
+const torus = new THREE.Mesh(torusGeometry, torusMaterial);
+torus.position.y = -20;
 scene.add(torus);
 
-// 6. ANIMATION LOOP
+// Create a starfield (randomly positioned particles)
+const starGeometry = new THREE.BufferGeometry();
+const starCount = 1000;
+const starVertices = [];
+for (let i = 0; i < starCount; i++) {
+  const x = THREE.MathUtils.randFloatSpread(200);
+  const y = THREE.MathUtils.randFloatSpread(200);
+  const z = THREE.MathUtils.randFloatSpread(200);
+  starVertices.push(x, y, z);
+}
+starGeometry.setAttribute('position', new THREE.Float32BufferAttribute(starVertices, 3));
+const starMaterial = new THREE.PointsMaterial({ color: 0xffffff });
+const stars = new THREE.Points(starGeometry, starMaterial);
+scene.add(stars);
+
+// Animation loop
 function animate() {
   requestAnimationFrame(animate);
 
-  // Rotate the torus
+  // Rotate objects over time
+  cube.rotation.x += 0.01;
+  cube.rotation.y += 0.01;
+
+  sphere.rotation.x += 0.01;
+  sphere.rotation.y += 0.01;
+
   torus.rotation.x += 0.01;
   torus.rotation.y += 0.01;
 
-  // Render the scene through the camera
   renderer.render(scene, camera);
 }
+
 animate();
 
-// 7. HANDLE RESIZE
+// Handle window resize
 window.addEventListener('resize', () => {
-  // Update camera aspect ratio and renderer size
   camera.aspect = window.innerWidth / window.innerHeight;
   camera.updateProjectionMatrix();
   renderer.setSize(window.innerWidth, window.innerHeight);
