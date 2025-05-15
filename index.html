@@ -3,580 +3,178 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Namkha Tashi Oedzer | Developer | Entrepreneur</title>
-    <script src="https://cdn.tailwindcss.com"></script>
+    <title>Namkha Tashi Oedzer - Cybersecurity Portfolio</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="portfolio.css">
     <style>
-        :root {
-            --accent: #64ffda;
-            --bg: #0a192f;
-            --text: #8892b0;
-            --heading: #ccd6f6;
-            --dark-navy: #020c1b;
-        }
-        
-        body {
-            background-color: var(--bg);
-            color: var(--text);
-            font-family: 'SF Mono', 'Fira Code', 'Fira Mono', monospace;
-        }
-        
-        .accent {
-            color: var(--accent);
-        }
-        
-        .heading {
-            color: var(--heading);
-        }
-        
-        .card {
-            background-color: rgba(10, 25, 47, 0.7);
-            border: 1px solid rgba(100, 255, 218, 0.1);
-            transition: all 0.3s ease;
-        }
-        
-        .card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 30px -15px rgba(2, 12, 27, 0.7);
-            border-color: var(--accent);
-        }
-        
-        .skill-tag {
-            background-color: rgba(100, 255, 218, 0.1);
-            color: var(--accent);
-            border: 1px solid rgba(100, 255, 218, 0.1);
-            transition: all 0.3s ease;
-        }
-        
-        .skill-tag:hover {
-            background-color: rgba(100, 255, 218, 0.2);
-        }
-        
-        /* Geometric shapes */
-        .shape {
-            position: absolute;
-            opacity: 0.1;
-            z-index: -1;
-        }
-        
-        .triangle {
-            width: 0;
-            height: 0;
-            border-left: 100px solid transparent;
-            border-right: 100px solid transparent;
-            border-bottom: 173px solid var(--accent);
-            top: 15%;
-            left: 10%;
-            animation: float 15s ease-in-out infinite;
-        }
-        
-        .circle {
-            width: 150px;
-            height: 150px;
-            border-radius: 50%;
-            border: 2px solid var(--accent);
-            top: 60%;
-            right: 15%;
-            animation: float 20s ease-in-out infinite reverse;
-        }
-        
-        .square {
-            width: 80px;
-            height: 80px;
-            border: 2px solid var(--accent);
-            bottom: 15%;
-            left: 20%;
-            animation: rotate 30s linear infinite;
-        }
-        
-        /* Additional Himalayan-themed shapes */
-        .mountain {
-            width: 0;
-            height: 0;
-            border-left: 80px solid transparent;
-            border-right: 80px solid transparent;
-            border-bottom: 130px solid var(--accent);
-            bottom: 30%;
-            right: 8%;
-            transform: scale(0.7);
-            animation: float 18s ease-in-out infinite;
-            opacity: 0.08;
-        }
-        
-        .mountain::after {
-            content: '';
-            position: absolute;
-            width: 0;
-            height: 0;
-            border-left: 50px solid transparent;
-            border-right: 50px solid transparent;
-            border-bottom: 100px solid var(--accent);
-            bottom: -10px;
-            left: -105px;
-        }
-        
-        .prayer-flag {
-            position: absolute;
-            width: 200px;
-            height: 2px;
-            background: rgba(255, 255, 255, 0.1);
-            top: 40%;
-            right: 20%;
-        }
-        
-        .flag {
-            position: absolute;
-            width: 25px;
-            height: 15px;
-            opacity: 0.15;
-            animation: wave 5s ease-in-out infinite;
-        }
-        
-        .flag:nth-child(1) {
-            background-color: #1ca9c9; /* Blue */
-            top: 0;
-            left: 0;
-        }
-        
-        .flag:nth-child(2) {
-            background-color: #ffffff; /* White */
-            top: 0;
-            left: 25px;
-            animation-delay: 0.2s;
-        }
-        
-        .flag:nth-child(3) {
-            background-color: #ff5a5f; /* Red */
-            top: 0;
-            left: 50px;
-            animation-delay: 0.4s;
-        }
-        
-        .flag:nth-child(4) {
-            background-color: #88b04b; /* Green */
-            top: 0;
-            left: 75px;
-            animation-delay: 0.6s;
-        }
-        
-        .flag:nth-child(5) {
-            background-color: #ffdd94; /* Yellow */
-            top: 0;
-            left: 100px;
-            animation-delay: 0.8s;
-        }
-        
-        @keyframes float {
-            0% { transform: translateY(0px) rotate(0deg); }
-            50% { transform: translateY(-20px) rotate(5deg); }
-            100% { transform: translateY(0px) rotate(0deg); }
-        }
-        
-        @keyframes rotate {
-            from { transform: rotate(0deg); }
-            to { transform: rotate(360deg); }
-        }
-        
-        @keyframes wave {
-            0% { transform: translateY(0) rotate(0deg); }
-            50% { transform: translateY(-4px) rotate(5deg); }
-            100% { transform: translateY(0) rotate(0deg); }
-        }
-        
-        .nav-link {
-            position: relative;
-            color: var(--text);
-            transition: color 0.3s ease;
-        }
-        
-        .nav-link:hover {
-            color: var(--accent);
-        }
-        
-        .nav-link::after {
-            content: '';
-            position: absolute;
-            width: 0;
-            height: 1px;
-            bottom: -5px;
-            left: 0;
-            background-color: var(--accent);
-            transition: width 0.3s ease;
-        }
-        
-        .nav-link:hover::after {
-            width: 100%;
-        }
-        
-        .social-link {
-            color: var(--text);
-            transition: all 0.3s ease;
-        }
-        
-        .social-link:hover {
-            color: var(--accent);
-            transform: translateY(-3px);
-        }
-        .profile-image {
-    height: 300px;
-    width: 100%;
-    overflow: hidden;
-    border-radius: 4px;
-    background-position: center;
-    background-size: cover;
-    background-repeat: no-repeat;
-    border: 1px solid rgba(100, 255, 218, 0.1);
-    position: relative;
-}
-
-.profile-image::after {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(10, 25, 47, 0.3); 
-    mix-blend-mode: color;
-}
-        /* Business card styles */
-        .business-image {
-            height: 180px;
-            width: 100%;
-            overflow: hidden;
-            border-radius: 4px;
-            margin-bottom: 1rem;
-            background-position: center;
-            background-size: cover;
-            background-repeat: no-repeat;
-            border: 1px solid rgba(100, 255, 218, 0.1);
-        }
-        
-        .business-image-1 {
-            background-image: url('https://rigden.store/cdn/shop/files/Screenshot_2025-01-27_at_10.23.20_PM.png?v=1738034687&width=1646');
-        }
-        
-        .business-image-2 {
-            background-image: url('https://neozen888.wordpress.com/wp-content/uploads/2011/05/liberationuponseeing.jpg');
-        }
-        
-        /* Footer styling */
-        .footer-links {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            gap: 1.5rem;
-            margin-top: 1.5rem;
-        }
-        
-        .footer-link {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            color: var(--text);
-            transition: all 0.3s ease;
-        }
-        
-        .footer-link:hover {
-            color: var(--accent);
-            transform: translateY(-3px);
-        }
+        [x-cloak] { display: none !important; }
     </style>
 </head>
-<body class="min-h-screen">
-    <!-- Background Shapes -->
-    <div class="shape triangle"></div>
-    <div class="shape circle"></div>
-    <div class="shape square"></div>
-    <div class="shape mountain"></div>
-    <div class="prayer-flag">
-        <div class="flag"></div>
-        <div class="flag"></div>
-        <div class="flag"></div>
-        <div class="flag"></div>
-        <div class="flag"></div>
-    </div>
-    
-    <div class="container mx-auto px-4 py-16 max-w-5xl">
-        <header class="flex flex-col md:flex-row justify-between items-center mb-16">
-            <div class="text-4xl font-bold heading mb-4 md:mb-0">
-                <span class="accent">N</span>amkha <span class="accent">O</span>edzer
-            </div>
-            <nav class="flex space-x-6">
-                <a href="#about" class="nav-link">About</a>
-                <a href="#experience" class="nav-link">Experience</a>
-                <a href="#projects" class="nav-link">Projects</a>
-                <a href="#businesses" class="nav-link">Businesses</a>
-                <a href="#skills" class="nav-link">Skills</a>
-            </nav>
-        </header>
-        
-        <main>
-            <section id="about" class="mb-24">
-    <h2 class="text-xl font-mono mb-2"><span class="accent">01.</span> About Me</h2>
-    <h1 class="text-5xl font-bold heading mb-8">Software Engineer, ML Enthusiast & Entrepreneur</h1>
-    <div class="flex flex-col md:flex-row gap-8">
-        <div class="w-full md:w-1/3">
-            <div class="profile-image" style="background-image: url('https://media.licdn.com/dms/image/v2/D4E03AQFH2H25hypK2Q/profile-displayphoto-shrink_800_800/B4EZW1iLVmGgAg-/0/1742507390612?e=1748476800&v=beta&t=DSvjrywkylvk3q0vFu1py8t2YsZEi5tnEqXOsjXn800');">
-                <img src="https://media.licdn.com/dms/image/v2/D4E03AQFH2H25hypK2Q/profile-displayphoto-shrink_800_800/B4EZW1iLVmGgAg-/0/1742507390612?e=1748476800&v=beta&t=DSvjrywkylvk3q0vFu1py8t2YsZEi5tnEqXOsjXn800" alt="Namkha Tashi Oedzer" class="w-full h-auto">
+<body>
+    <!-- Navigation -->
+    <nav class="fixed w-full top-0 z-50 py-4">
+        <div class="container mx-auto flex justify-between items-center px-4">
+            <div class="text-2xl font-bold text-white">Namkha Tashi Oedzer</div>
+            <div class="space-x-4 flex">
+                <a href="#home" class="px-3 py-2">Home</a>
+                <a href="#about" class="px-3 py-2">About</a>
+                <a href="#skills" class="px-3 py-2">Skills</a>
+                <a href="#projects" class="px-3 py-2">Projects</a>
+                <a href="#contact" class="px-3 py-2">Contact</a>
             </div>
         </div>
-        <div class="text-lg leading-relaxed max-w-2xl w-full md:w-2/3">
-            <p class="mb-4">I'm a Computer Science student at Hunter College with experience in software engineering and machine learning. I specialize in building exceptional digital experiences and developing intelligent solutions.</p>
-            <p class="mb-4">With Himalayan heritage and a passion for cultural preservation, I've founded ventures that bridge Eastern traditions with modern technology, creating platforms that celebrate and sustain cultural identity.</p>
-            <div class="flex space-x-4 mt-8">
-                <a href="mailto:oedzernamkha@gmail.com" class="social-link">
-                    <i class="fas fa-envelope text-xl"></i>
+    </nav>
+
+    <!-- Home Section -->
+    <header id="home" class="relative pt-24 pb-16 text-center text-white">
+        <div class="container mx-auto px-4 relative z-10">
+            <h1 class="text-4xl font-bold mb-4" style="--delay: 1">Cybersecurity Enthusiast & Software Engineer</h1>
+            <p class="text-xl mb-6" style="--delay: 2">Passionate about securing digital landscapes and solving complex security challenges</p>
+            <div class="flex justify-center space-x-4" style="--delay: 3">
+                <a href="https://github.com/namkha-yolo" target="_blank" class="btn btn-primary">
+                    <i class="fab fa-github mr-2"></i>GitHub
                 </a>
-                <a href="tel:917-460-5688" class="social-link">
-                    <i class="fas fa-phone text-xl"></i>
-                </a>
-                <a href="https://www.linkedin.com/in/namkha-oedzer-717882221/" class="social-link" target="_blank">
-                    <i class="fab fa-linkedin text-xl"></i>
-                </a>
-                <a href="https://github.com/Namkha-yolo" class="social-link" target="_blank">
-                    <i class="fab fa-github text-xl"></i>
+                <a href="https://www.linkedin.com/in/namkha-tashi-oedzer" target="_blank" class="btn btn-primary">
+                    <i class="fab fa-linkedin mr-2"></i>LinkedIn
                 </a>
             </div>
         </div>
-    </div>
-</section>
-            
-            <section id="experience" class="mb-24">
-                <h2 class="text-xl font-mono mb-8"><span class="accent">02.</span> Where I've Worked</h2>
-                <div class="grid md:grid-cols-2 gap-6">
-                    <div class="card p-6 rounded-md">
-                        <h3 class="text-lg accent mb-1">Headstarter AI</h3>
-                        <h4 class="heading font-bold text-xl mb-2">Software Engineering Resident</h4>
-                        <p class="text-sm mb-2">September 2024 - Present</p>
-                        <ul class="list-disc pl-5 space-y-2">
-                            <li>Built 14+ machine learning and full-stack projects</li>
-                            <li>Developed 5+ neural networks in Python, 11 apps in TypeScript</li>
-                            <li>Implemented LLM chaining, hyperparameter tuning on 10+ models</li>
-                        </ul>
-                    </div>
-                    <div class="card p-6 rounded-md">
-                        <h3 class="text-lg accent mb-1">BIG REUSE</h3>
-                        <h4 class="heading font-bold text-xl mb-2">Software Engineering Intern</h4>
-                        <p class="text-sm mb-2">July 2024 - August 2024</p>
-                        <ul class="list-disc pl-5 space-y-2">
-                            <li>Created web services for email automation</li>
-                            <li>Built automation services using JavaScript and Google Apps Script</li>
-                            <li>Implemented visibility of automation resources</li>
-                        </ul>
-                    </div>
-                    <div class="card p-6 rounded-md">
-                        <h3 class="text-lg accent mb-1">Rigden Store</h3>
-                        <h4 class="heading font-bold text-xl mb-2">Founder & Developer</h4>
-                        <p class="text-sm mb-2">2022 - Present</p>
-                        <ul class="list-disc pl-5 space-y-2">
-                            <li>Founded e-commerce platform for authentic Himalayan products</li>
-                            <li>Developed website, marketing strategy, and supply chain</li>
-                            <li>Connected Himalayan artisans with global customers</li>
-                        </ul>
-                    </div>
-                    <div class="card p-6 rounded-md">
-                        <h3 class="text-lg accent mb-1">Peace Vase Project</h3>
-                        <h4 class="heading font-bold text-xl mb-2">Database Management</h4>
-                        <p class="text-sm mb-2">May 2023 - Present</p>
-                        <ul class="list-disc pl-5 space-y-2">
-                            <li>Building cross platform applications for global accessibility</li>
-                            <li>Developing automation programs for data entries</li>
-                            <li>Created Swift algorithm to optimize user movement</li>
+    </header>
+
+    <!-- About Section -->
+    <section id="about" class="bg-white">
+        <div class="container mx-auto px-4">
+            <h2 class="text-3xl font-bold text-center mb-8" style="--delay: 1">About Me</h2>
+            <div class="max-w-2xl mx-auto text-center">
+                <p class="text-gray-700 mb-4" style="--delay: 2">
+                    I'm a Computer Science student at Hunter College with a growing passion for cybersecurity. My technical experiences span software engineering, security tools, and proactive approach to data protection.
+                </p>
+                <p class="text-gray-700" style="--delay: 3">
+                    I'm particularly interested in network security, penetration testing, and developing secure software solutions. My projects demonstrate a commitment to understanding security principles and implementing best practices.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Skills Section -->
+    <section id="skills" class="bg-gray-100">
+        <div class="container mx-auto px-4">
+            <h2 class="text-3xl font-bold text-center mb-8" style="--delay: 1">Technical Skills</h2>
+            <div class="grid md:grid-cols-3 gap-6">
+                <div class="card p-6" style="--delay: 2">
+                    <h3 class="text-xl font-semibold mb-4">Security & Networking</h3>
+                    <div class="card-content">
+                        <ul class="list-disc list-inside text-gray-700">
+                            <li>Kali Linux</li>
+                            <li>Nmap</li>
+                            <li>Wireshark</li>
+                            <li>Burp Suite</li>
+                            <li>Basic Metasploit</li>
+                            <li>TCP/IP Fundamentals</li>
                         </ul>
                     </div>
                 </div>
-            </section>
-            
-            <section id="projects" class="mb-24">
-                <h2 class="text-xl font-mono mb-8"><span class="accent">03.</span> Some Things I've Built</h2>
-                <div class="grid md:grid-cols-2 gap-6">
-                    <div class="card p-6 rounded-md">
-                        <h3 class="heading font-bold text-xl mb-2">Bank Churn Prediction</h3>
-                        <p class="text-sm mb-4">Using ML to predict customer churn</p>
-                        <ul class="list-disc pl-5 space-y-2">
-                            <li>Analyzed 30k+ dataset using Llama 3.1b and Grok</li>
-                            <li>Created end-to-end solution with personalized emails</li>
-                            <li>Implemented feature engineering and hyperparameter tuning</li>
-                        </ul>
-                        <div class="flex space-x-3 mt-4">
-                            <span class="skill-tag text-xs px-2 py-1 rounded">Python</span>
-                            <span class="skill-tag text-xs px-2 py-1 rounded">ML</span>
-                            <span class="skill-tag text-xs px-2 py-1 rounded">Vercel</span>
-                        </div>
-                    </div>
-                    <div class="card p-6 rounded-md">
-                        <h3 class="heading font-bold text-xl mb-2">Brain Tumor Classification</h3>
-                        <p class="text-sm mb-4">Neural network for MRI analysis</p>
-                        <ul class="list-disc pl-5 space-y-2">
-                            <li>Classified 1000 MRI scans using neural networks</li>
-                            <li>Generated multimodal MRI reports for neurosurgeons</li>
-                            <li>Created custom model for medical imaging</li>
-                        </ul>
-                        <div class="flex space-x-3 mt-4">
-                            <span class="skill-tag text-xs px-2 py-1 rounded">Python</span>
-                            <span class="skill-tag text-xs px-2 py-1 rounded">Neural Networks</span>
-                            <span class="skill-tag text-xs px-2 py-1 rounded">TensorFlow</span>
-                        </div>
-                    </div>
-                    <div class="card p-6 rounded-md">
-                        <h3 class="heading font-bold text-xl mb-2">Tibetan Transliterator</h3>
-                        <p class="text-sm mb-4">Browser extension for language preservation</p>
-                        <ul class="list-disc pl-5 space-y-2">
-                            <li>Built extension for preservation of Tibetan language</li>
-                            <li>Enabled easy digital access for learners and speakers</li>
-                            <li>Implemented transliteration algorithm for accuracy</li>
-                        </ul>
-                        <div class="flex space-x-3 mt-4">
-                            <span class="skill-tag text-xs px-2 py-1 rounded">JavaScript</span>
-                            <span class="skill-tag text-xs px-2 py-1 rounded">Chrome Extension</span>
-                            <span class="skill-tag text-xs px-2 py-1 rounded">Cultural Tech</span>
-                        </div>
-                    </div>
-                    <div class="card p-6 rounded-md">
-                        <h3 class="heading font-bold text-xl mb-2">Bhutanese Keyboard</h3>
-                        <p class="text-sm mb-4">Mobile input tool for language accessibility</p>
-                        <ul class="list-disc pl-5 space-y-2">
-                            <li>Developed keyboard for Bhutanese youth language adoption</li>
-                            <li>Created intuitive input system for Dzongkha script</li>
-                            <li>Launched on iOS with positive reception</li>
-                        </ul>
-                        <div class="flex space-x-3 mt-4">
-                            <span class="skill-tag text-xs px-2 py-1 rounded">Swift</span>
-                            <span class="skill-tag text-xs px-2 py-1 rounded">iOS</span>
-                            <span class="skill-tag text-xs px-2 py-1 rounded">Localization</span>
-                        </div>
-                    </div>
-                </div>
-            </section>
-            
-            <section id="businesses" class="mb-24">
-                <h2 class="text-xl font-mono mb-8"><span class="accent">04.</span> Business Ventures</h2>
-                <div class="grid md:grid-cols-2 gap-6">
-                    <div class="card p-6 rounded-md">
-                        <div class="business-image business-image-1"></div>
-                        <h3 class="heading font-bold text-xl mb-2">Rigden Store</h3>
-                        <p class="mb-4">An e-commerce platform offering authentic Himalayan products, including traditional arts, crafts, textiles, and wellness items.</p>
-                        <ul class="list-disc pl-5 space-y-2">
-                            <li>Connects Himalayan artisans with global customers</li>
-                            <li>Ensures fair trade practices and cultural authenticity</li>
-                            <li>Preserves traditional craftsmanship methods</li>
-                        </ul>
-                        <div class="mt-4">
-                            <a href="https://rigden.store" target="_blank" class="accent hover:underline">
-                                <i class="fas fa-external-link-alt mr-2"></i>rigden.store
-                            </a>
-                        </div>
-                    </div>
-                    <div class="card p-6 rounded-md">
-                        <div class="business-image business-image-2"></div>
-                        <h3 class="heading font-bold text-xl mb-2">dallayKewa Productions</h3>
-                        <p class="mb-4">A media production company creating authentic content that celebrates Tibetan and Bhutanese culture and heritage.</p>
-                        <ul class="list-disc pl-5 space-y-2">
-                            <li>Produces documentaries, short films, and music</li>
-                            <li>Creates educational content on Himalayan traditions</li>
-                            <li>Digitally archives cultural expressions and histories</li>
-                        </ul>
-                        <div class="mt-4">
-                            <a href="https://soundcloud.com/dallay-kewa" target="_blank" class="accent hover:underline">
-                                <i class="fas fa-external-link-alt mr-2"></i>dallaykewa.com
-                            </a>
-                        </div>
-                    </div>
-                </div>
-            </section>
-            
-            <section id="skills" class="mb-24">
-                <h2 class="text-xl font-mono mb-8"><span class="accent">05.</span> Skills & Education</h2>
-                <div class="grid md:grid-cols-2 gap-6">
-                    <div class="card p-6 rounded-md">
-                        <h3 class="heading font-bold text-xl mb-4">Tech Stack</h3>
-                        <div class="flex flex-wrap gap-2">
-                            <span class="skill-tag text-xs px-2 py-1 rounded">C++</span>
-                            <span class="skill-tag text-xs px-2 py-1 rounded">JavaScript</span>
-                            <span class="skill-tag text-xs px-2 py-1 rounded">React</span>
-                            <span class="skill-tag text-xs px-2 py-1 rounded">NodeJS</span>
-                            <span class="skill-tag text-xs px-2 py-1 rounded">Python</span>
-                            <span class="skill-tag text-xs px-2 py-1 rounded">TensorFlow</span>
-                            <span class="skill-tag text-xs px-2 py-1 rounded">Pandas</span>
-                            <span class="skill-tag text-xs px-2 py-1 rounded">Swift</span>
-                            <span class="skill-tag text-xs px-2 py-1 rounded">AWS</span>
-                            <span class="skill-tag text-xs px-2 py-1 rounded">SQL</span>
-                            <span class="skill-tag text-xs px-2 py-1 rounded">React</span>
-                            <span class="skill-tag text-xs px-2 py-1 rounded">NodeJS</span>
-                            <span class="skill-tag text-xs px-2 py-1 rounded">Git</span>
-                            <span class="skill-tag text-xs px-2 py-1 rounded">HTML/CSS</span>
-                        </div>
-                    </div>
-                    <div class="card p-6 rounded-md">
-                        <h3 class="heading font-bold text-xl mb-4">Business Skills</h3>
-                        <div class="flex flex-wrap gap-2">
-                            <span class="skill-tag text-xs px-2 py-1 rounded">E-commerce</span>
-                            <span class="skill-tag text-xs px-2 py-1 rounded">Communication</span>
-                            <span class="skill-tag text-xs px-2 py-1 rounded">Digital Marketing</span>
-                            <span class="skill-tag text-xs px-2 py-1 rounded">Content Creation</span>
-                            <span class="skill-tag text-xs px-2 py-1 rounded">Supply Chain</span>
-                            <span class="skill-tag text-xs px-2 py-1 rounded">Cultural Consulting</span>
-                            <span class="skill-tag text-xs px-2 py-1 rounded">Product Development</span>
-                            <span class="skill-tag text-xs px-2 py-1 rounded">Project Management</span>
-                            <span class="skill-tag text-xs px-2 py-1 rounded">Brand Strategy</span>
-                        </div>
-                    </div>
-                    <div class="card p-6 rounded-md">
-                        <h3 class="heading font-bold text-xl mb-4">Education</h3>
-                        <div class="mb-4">
-                            <h4 class="font-bold heading">Hunter College, CUNY</h4>
-                            <p>B.A. in Computer Science | Minor in Mathematics</p>
-                            <p class="text-sm">Expected Graduation: May 2026</p>
-                        </div>
-                        <div>
-                            <h4 class="font-bold heading">Certifications</h4>
-                            <p>Google Machine Learning Foundational Courses</p>
-                        </div>
-                    </div>
-                    <div class="card p-6 rounded-md">
-                        <h3 class="heading font-bold text-xl mb-4">Languages</h3>
-                        <ul class="space-y-2">
-                            <li><span class="accent">English</span> - Fluent</li>
-                            <li><span class="accent">Hindi</span> - Fluent - cant write though</li>
-                            <li><span class="accent">Tibetan</span> - Fluent</li>
-                            <li><span class="accent">Dzongkha</span> - Fluent</li>
+                <div class="card p-6" style="--delay: 3">
+                    <h3 class="text-xl font-semibold mb-4">Programming Languages</h3>
+                    <div class="card-content">
+                        <ul class="list-disc list-inside text-gray-700">
+                            <li>Python</li>
+                            <li>JavaScript/Node.js</li>
+                            <li>Bash</li>
+                            <li>C++</li>
                         </ul>
                     </div>
                 </div>
-            </section>
-        </main>
-        
-        <footer class="text-center mt-24">
-            <p class="text-sm">Designed & Built by Namkha Tashi Oedzer | © 2025</p>
-            
-            <div class="footer-links">
-                <a href="mailto:oedzernamkha@gmail.com" class="footer-link">
-                    <i class="fas fa-envelope"></i>
-                    <span>oedzernamkha@gmail.com</span>
+                <div class="card p-6" style="--delay: 4">
+                    <h3 class="text-xl font-semibold mb-4">Development Tools</h3>
+                    <div class="card-content">
+                        <ul class="list-disc list-inside text-gray-700">
+                            <li>Git</li>
+                            <li>Docker</li>
+                            <li>VirtualBox</li>
+                            <li>Linux/Ubuntu</li>
+                            <li>Basic SQL</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Projects Section -->
+    <section id="projects" class="bg-white">
+        <div class="container mx-auto px-4">
+            <h2 class="text-3xl font-bold text-center mb-8" style="--delay: 1">Security-Focused Projects</h2>
+            <div class="grid md:grid-cols-2 gap-6">
+                <div class="project-card card p-6" style="--delay: 2">
+                    <h3 class="text-xl font-semibold mb-4">Translator Buddy</h3>
+                    <div class="project-card-content flex-grow">
+                        <p class="text-gray-700 mb-4">
+                            Web-based voice translation app with a focus on secure, cross-platform communication.
+                        </p>
+                        <ul class="list-disc list-inside text-gray-700 mb-4">
+                            <li>Implemented multi-language support</li>
+                            <li>Utilized Web Speech and Audio APIs securely</li>
+                            <li>Designed with responsive security in mind</li>
+                        </ul>
+                    </div>
+                    <a href="https://github.com/namkha-yolo/translator-buddy" target="_blank" class="text-blue-600 hover:underline mt-auto">
+                        View Project <i class="fab fa-github ml-2"></i>
+                    </a>
+                </div>
+                <div class="project-card card p-6" style="--delay: 3">
+                    <h3 class="text-xl font-semibold mb-4">Peace Vase Project Database</h3>
+                    <div class="project-card-content flex-grow">
+                        <p class="text-gray-700 mb-4">
+                            Implemented security improvements for a multi-country volunteer database.
+                        </p>
+                        <ul class="list-disc list-inside text-gray-700 mb-4">
+                            <li>Moved sensitive columns to private tabs</li>
+                            <li>Created duplicate entry detection script</li>
+                            <li>Developed local data storage iOS app</li>
+                        </ul>
+                    </div>
+                    <a href="https://github.com/namkha-yolo/peace-vase-project" target="_blank" class="text-blue-600 hover:underline mt-auto">
+                        View Project <i class="fab fa-github ml-2"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="bg-blue-600 text-white">
+        <div class="container mx-auto px-4 text-center">
+            <h2 class="text-3xl font-bold mb-6" style="--delay: 1">Get in Touch</h2>
+            <p class="text-xl mb-6" style="--delay: 2">Interested in discussing cybersecurity opportunities or collaboration?</p>
+            <div class="space-x-4" style="--delay: 3">
+                <a href="mailto:oedzernamkha@gmail.com" class="btn btn-primary">
+                    <i class="fas fa-envelope mr-2"></i>Email Me
                 </a>
-                
-                <a href="https://github.com/Namkha-yolo" target="_blank" class="footer-link">
-                    <i class="fab fa-github"></i>
-                    <span>GitHub</span>
-                </a>
-                
-                <a href="https://www.linkedin.com/in/namkha-oedzer-717882221/" target="_blank" class="footer-link">
-                    <i class="fab fa-linkedin"></i>
-                    <span>LinkedIn</span>
-                </a>
-                
-                <a href="https://rigdenstudios.com" target="_blank" class="footer-link">
-                    <i class="fas fa-store"></i>
-                    <span>rigden.store</span>
-                </a>
-                
-                <a href="https://soundcloud.com/dallay-kewa" target="_blank" class="footer-link">
-                    <i class="fas fa-film"></i>
-                    <span>dallaykewa.com</span>
+                <a href="https://www.linkedin.com/in/namkha-tashi-oedzer" target="_blank" class="btn btn-primary">
+                    <i class="fab fa-linkedin mr-2"></i>Connect on LinkedIn
                 </a>
             </div>
-        </footer>
-    </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-white py-4 text-center">
+        <p>&copy; 2025 Namkha Tashi Oedzer. All rights reserved.</p>
+    </footer>
+
+    <script>
+        // Smooth scrolling for navigation links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+    </script>
 </body>
 </html>
