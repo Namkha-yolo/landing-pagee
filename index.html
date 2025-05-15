@@ -3,55 +3,135 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Namkha’s Cyber‑Terminal</title>
+  <title>Namkha’s Cyber Portfolio</title>
+  <link href="https://fonts.googleapis.com/css2?family=Source+Code+Pro:wght@400;700&display=swap" rel="stylesheet">
   <style>
-    /* Terminal look */
-    body, html {
-      margin: 0; padding: 0;
-      width: 100%; height: 100%;
-      background: #000;
-      color: #0f0;
-      font-family: 'Source Code Pro', monospace;
-      font-size: 16px;
+    :root {
+      --bg-dark: #0f0f0f;
+      --bg-panel: #181818;
+      --text-main: #c8ff00;
+      --text-secondary: #33ffcc;
+      --accent-neon: #00ff6a;
+      --accent-blue: #0af;
+      --shadow-glow: rgba(0, 255, 106, 0.13);
+    }
+    body {
+      margin: 0; padding: 0; background: var(--bg-dark); color: var(--text-main);
+      font-family: 'Source Code Pro', monospace; min-height: 100vh;
+    }
+    .wrapper {
+      max-width: 1000px;
+      margin: 0 auto;
+      padding: 2.5rem 1rem 0.5rem 1rem;
+    }
+    .main-content {
+      margin-bottom: 2.5rem;
+    }
+    h1 {
+      color: var(--accent-neon); font-size: 2.6rem; font-family: 'Source Code Pro', monospace;
+      letter-spacing: 1px; text-shadow: 0 0 8px var(--shadow-glow);
+      margin-bottom: 0.5rem;
+    }
+    h2 { color: var(--accent-blue); font-size: 1.5rem; margin-bottom: 0.25rem; }
+    h3 { color: var(--text-secondary); font-size: 1.1rem; margin: 1rem 0 0.25rem; }
+    p, ul { color: var(--text-main); font-size: 1.05rem; margin: 0.1rem 0 1rem 0; }
+    .card-grid { display: flex; flex-wrap: wrap; gap: 1.5rem; margin: 1.2rem 0; }
+    .card {
+      flex: 1 1 320px;
+      min-width: 280px; background: var(--bg-panel); border: 1px solid var(--accent-neon);
+      border-radius: 0.6rem; box-shadow: 0 0 12px var(--shadow-glow);
+      padding: 1rem 1.5rem; margin-bottom: 0.5rem;
+      transition: transform 0.3s, box-shadow 0.3s;
+    }
+    .card:hover { transform: translateY(-4px) scale(1.02); box-shadow: 0 0 24px var(--accent-neon);}
+    a { color: var(--accent-blue); text-decoration: underline; }
+    /* Terminal styles */
+    #terminal-container {
+      background: #181818;
+      border-radius: 0.5rem;
+      box-shadow: 0 0 16px var(--shadow-glow);
+      margin-top: 2.3rem;
+      padding: 1rem;
+      min-height: 300px;
+      font-size: 1.08rem;
     }
     #terminal {
-      box-sizing: border-box;
-      padding: 1rem;
-      height: 100%;
-      overflow-y: auto;
+      min-height: 160px; max-height: 300px; overflow-y: auto;
       white-space: pre-wrap;
     }
-    .prompt {
-      display: flex;
-    }
-    .prompt span {
-      flex-shrink: 0;
-      margin-right: 0.5rem;
-    }
+    .prompt { display: flex; align-items: center; margin-top: 0.2em; }
+    .prompt span { margin-right: 0.5rem; color: var(--accent-neon);}
     .prompt input {
-      flex-grow: 1;
-      background: transparent;
-      border: none;
-      color: #0f0;
-      outline: none;
-      font-family: inherit;
-      font-size: inherit;
+      flex: 1; background: transparent; border: none;
+      color: var(--text-main); outline: none; font-family: inherit; font-size: inherit;
     }
-    a { color: #0f0; text-decoration: underline; }
-    /* Blink cursor */
-    @keyframes blink { 0%, 50% { opacity: 1; } 51%, 100% { opacity: 0; } }
-    .cursor { display:inline-block; width:10px; background:#0f0; margin-left:2px; animation:blink 1s steps(2) infinite; }
+    .cursor {
+      display: inline-block; width: 10px; background: var(--accent-neon); margin-left: 2px;
+      animation: blink 1s steps(2) infinite;
+    }
+    @keyframes blink { 0%,50% {opacity: 1;} 51%,100% {opacity: 0;} }
+    /* Responsive */
+    @media (max-width: 700px) {
+      .card-grid { flex-direction: column; gap: 1rem; }
+    }
   </style>
 </head>
 <body>
-  <div id="terminal"></div>
+  <div class="wrapper">
+    <!-- ===== STATIC CONTENT ABOVE TERMINAL ===== -->
+    <section class="main-content">
+      <h1>Namkha Tashi Oedzer</h1>
+      <p>
+        <b>CS Junior @ Hunter College</b> &mdash; Building hands-on cybersecurity & software projects.<br>
+        <b>Email:</b> oedzernamkha@gmail.com &nbsp; | &nbsp;
+        <b>GitHub:</b> <a href="https://github.com/namkha-yolo" target="_blank">namkha-yolo</a> &nbsp; | &nbsp;
+        <b>LinkedIn:</b> <a href="https://linkedin.com/in/namkha-oedzer" target="_blank">namkha-oedzer</a>
+      </p>
+      <h2>Summary</h2>
+      <p>
+        Motivated student with interests in cybersecurity, scripting, and DevOps. Experienced with home pentesting labs, automation scripts, and secure web basics.
+      </p>
+      <h2>Projects</h2>
+      <div class="card-grid">
+        <div class="card">
+          <h3>Auto‑Vuln Scanner</h3>
+          <p>Python + Nmap tool. Parses scan XML, creates HTML dashboard of risky ports.</p>
+          <a href="#">Type <b>projects</b> in the terminal for more info</a>
+        </div>
+        <div class="card">
+          <h3>Mini‑SIEM on ELK</h3>
+          <p>Single-node ELK/Suricata; sends Slack alerts on SSH brute-force events.</p>
+          <a href="#">Type <b>projects</b> for more details</a>
+        </div>
+        <div class="card">
+          <h3>Phishing URL Checker</h3>
+          <p>Python CLI. Checks URLs against VirusTotal and regex patterns.</p>
+        </div>
+        <div class="card">
+          <h3>Home Pentest Lab</h3>
+          <p>Kali/Metasploitable VMs in VirtualBox. Practicing Nmap, Metasploit, write-ups.</p>
+        </div>
+      </div>
+      <h2>Skills</h2>
+      <ul>
+        <li>Languages: Python, JS/Node, Bash, C++</li>
+        <li>Security Tools: Kali, Nmap, Wireshark, Burp Suite, basic Metasploit</li>
+        <li>Dev: Git, Docker, VirtualBox, Linux</li>
+      </ul>
+    </section>
+
+    <!-- ===== INTERACTIVE TERMINAL ===== -->
+    <div id="terminal-container">
+      <div id="terminal"></div>
+    </div>
+  </div>
 
   <script>
     const term = document.getElementById('terminal');
-
     const promptText = 'namkha@huntcoll:~$';
+
     function writeLine(text = '') {
-      term.insertAdjacentHTML('beforeend', text.replace(/\n/g,'<br/>') + '<br/>');
+      term.insertAdjacentHTML('beforeend', text.replace(/\n/g, '<br/>') + '<br/>');
       term.scrollTop = term.scrollHeight;
     }
 
@@ -78,25 +158,50 @@
     function processCommand(cmd) {
       switch(cmd) {
         case 'help':
-          writeLine(`Available commands:\nhelp  about  skills  projects  contact  clear`);
+          writeLine(
+            `Available commands:\n` +
+            `<b>about</b> &nbsp;&nbsp; Show detailed bio\n` +
+            `<b>skills</b> &nbsp;&nbsp; Security, dev, and OS skills\n` +
+            `<b>projects</b> &nbsp;&nbsp; Show project specs\n` +
+            `<b>contact</b> &nbsp;&nbsp; Email and links\n` +
+            `<b>clear</b> &nbsp;&nbsp; Clear terminal\n`
+          );
           break;
         case 'about':
-          writeLine(`Hi, I’m Namkha—CS junior at Hunter College.\nPassionate about automation, pentesting, and secure code.`);
+          writeLine(
+            `Namkha Oedzer | CS junior | Hunter College (NYC)\n` +
+            `Learning by building: From scripting Google Apps workflows to\n` +
+            `standing up a home pentest lab. I enjoy making systems more secure and efficient.`
+          );
           break;
         case 'skills':
-          writeLine(`Languages: Python, JS/Node, Bash, C++\nTools: Kali, Nmap, Wireshark, Burp\nDev: Git, Docker, Terraform, AWS`);
+          writeLine(
+            `Languages:\n  Python, JavaScript/Node, Bash, C++\n` +
+            `Security Tools:\n  Kali Linux, Nmap, Wireshark, Burp Suite, Metasploit (basic)\n` +
+            `Dev/OS:\n  Git, Docker, VirtualBox, Linux/Ubuntu`
+          );
           break;
         case 'projects':
-          writeLine(`1) Auto‑Vuln Scanner (Python + Nmap)\n2) Mini‑SIEM on ELK\n3) Home Pentest Lab (Kali+VMs)\n4) Phish‑URL Checker`);
+          writeLine(
+            `Project Details:\n\n` +
+            `• Auto‑Vuln Scanner:\n    Parses Nmap XML, builds HTML dashboards. CLI flags, HTML templates.\n` +
+            `• Mini‑SIEM on ELK:\n    Docker-compose, Suricata IDS, triggers Slack webhook on >5 SSH fails/min.\n` +
+            `• Phishing URL Checker:\n    Python, checks URLs against VirusTotal API + custom regex.\n` +
+            `• Home Pentest Lab:\n    VirtualBox, Kali, Metasploitable, basic exploits, Markdown write-ups.`
+          );
           break;
         case 'contact':
-          writeLine(`Email: oedzernamkha@gmail.com\nLinkedIn: linkedin.com/in/namkha-oedzer\nGitHub: github.com/namkha-yolo`);
+          writeLine(
+            `Email: oedzernamkha@gmail.com\n` +
+            `GitHub: github.com/namkha-yolo\n` +
+            `LinkedIn: linkedin.com/in/namkha-oedzer`
+          );
           break;
         case 'clear':
           term.innerHTML = '';
           break;
         case '':
-          // do nothing
+          // Do nothing on empty
           break;
         default:
           writeLine(`command not found: ${cmd}`);
@@ -104,9 +209,8 @@
       showPrompt();
     }
 
-    // initial banner & prompt
-    writeLine("Welcome to Namkha’s Cyber‑Terminal!");
-    writeLine("Type 'help' and press Enter to see available commands.\n");
+    // Initial banner and prompt
+    writeLine("Welcome to Namkha’s Cyber‑Terminal below! Type <b>help</b> and press Enter for commands.\n");
     showPrompt();
   </script>
 </body>
