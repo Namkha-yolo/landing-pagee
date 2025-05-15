@@ -3,140 +3,178 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Namkha Tashi Oedzer - Cybersecurity Portfolio</title>
+    <title>Namkha Tashi Oedzer | Cybersecurity Student</title>
+
+    <!-- Fonts / Icons / Tailwind -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Custom CSS (optional external) -->
     <link rel="stylesheet" href="portfolio.css">
-    <style>
-        [x-cloak] { display: none !important; }
-    </style>
+
+    <!-- Hide Alpine/Tailwind x-cloak elements until ready -->
+    <style>[x-cloak]{display:none!important}</style>
 </head>
-<body>
-    <!-- Navigation -->
-    <nav class="fixed w-full top-0 z-50 py-4">
-        <div class="container mx-auto flex justify-between items-center px-4">
-            <div class="text-2xl font-bold text-white">Namkha Tashi Oedzer</div>
-            <div class="space-x-4 flex">
-                <a href="#home" class="px-3 py-2">Home</a>
-                <a href="#about" class="px-3 py-2">About</a>
-                <a href="#skills" class="px-3 py-2">Skills</a>
-                <a href="#projects" class="px-3 py-2">Projects</a>
-                <a href="#contact" class="px-3 py-2">Contact</a>
+
+<body class="font-inter bg-gray-50 text-gray-800 scroll-smooth">
+    <!-- ───────── NAV ───────── -->
+    <nav class="fixed w-full top-0 z-50 bg-gray-900/70 backdrop-blur-md py-3">
+        <div class="container mx-auto px-4 flex justify-between items-center text-white">
+            <span class="text-xl font-semibold">Namkha&nbsp;Tashi&nbsp;Oedzer</span>
+
+            <div class="space-x-4 text-sm">
+                <a href="#home"    class="hover:text-blue-400">Home</a>
+                <a href="#about"   class="hover:text-blue-400">About</a>
+                <a href="#skills"  class="hover:text-blue-400">Skills</a>
+                <a href="#projects"class="hover:text-blue-400">Projects</a>
+                <a href="#contact" class="hover:text-blue-400">Contact</a>
             </div>
         </div>
     </nav>
 
-    <!-- Home Section -->
-    <header id="home" class="relative pt-24 pb-16 text-center text-white">
-        <div class="container mx-auto px-4 relative z-10">
-            <h1 class="text-4xl font-bold mb-4" style="--delay: 1">Cybersecurity Enthusiast & Software Engineer</h1>
-            <p class="text-xl mb-6" style="--delay: 2">Passionate about securing digital landscapes and solving complex security challenges</p>
-            <div class="flex justify-center space-x-4" style="--delay: 3">
-                <a href="https://github.com/namkha-yolo" target="_blank" class="btn btn-primary">
+    <!-- ───────── HOME ───────── -->
+    <header id="home" class="relative pt-28 pb-20 text-center bg-gradient-to-b from-gray-900 to-gray-700 text-white">
+        <div class="container mx-auto px-4">
+            <h1 class="text-4xl font-bold mb-3">Cybersecurity Student&nbsp;&nbsp;|&nbsp;&nbsp;Software Enthusiast</h1>
+            <p class="text-lg mb-6 max-w-2xl mx-auto">
+                Learning by building &nbsp;•&nbsp; Interested in network defense, ethical hacking, and secure software.
+            </p>
+
+            <div class="flex justify-center space-x-4">
+                <a href="https://github.com/namkha-yolo"        target="_blank" class="btn btn-primary bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md flex items-center">
                     <i class="fab fa-github mr-2"></i>GitHub
                 </a>
-                <a href="https://www.linkedin.com/in/namkha-tashi-oedzer" target="_blank" class="btn btn-primary">
+                <a href="https://www.linkedin.com/in/namkha-tashi-oedzer" target="_blank" class="btn btn-primary bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md flex items-center">
                     <i class="fab fa-linkedin mr-2"></i>LinkedIn
                 </a>
             </div>
         </div>
     </header>
 
-    <!-- About Section -->
-    <section id="about" class="bg-white">
-        <div class="container mx-auto px-4">
-            <h2 class="text-3xl font-bold text-center mb-8" style="--delay: 1">About Me</h2>
-            <div class="max-w-2xl mx-auto text-center">
-                <p class="text-gray-700 mb-4" style="--delay: 2">
-                    I'm a Computer Science student at Hunter College with a growing passion for cybersecurity. My technical experiences span software engineering, security tools, and proactive approach to data protection.
-                </p>
-                <p class="text-gray-700" style="--delay: 3">
-                    I'm particularly interested in network security, penetration testing, and developing secure software solutions. My projects demonstrate a commitment to understanding security principles and implementing best practices.
-                </p>
-            </div>
+    <!-- ───────── ABOUT ───────── -->
+    <section id="about" class="bg-white py-14">
+        <div class="container mx-auto px-4 text-center max-w-3xl">
+            <h2 class="text-3xl font-bold mb-6">About Me</h2>
+            <p class="text-gray-700 mb-4">
+                Hi! I’m a junior CS major at Hunter College exploring the foundations of cybersecurity.  
+                I enjoy turning class concepts into small, useful projects—everything from Google Apps Script
+                automations to a home pentest lab.  My goal is to keep leveling-up by contributing to
+                real-world security teams.
+            </p>
+            <p class="text-gray-700">
+                Current interests: basic threat detection, secure web apps, and how open-source tools (ELK, Suricata, etc.)
+                fit into modern blue-team workflows.
+            </p>
         </div>
     </section>
 
-    <!-- Skills Section -->
-    <section id="skills" class="bg-gray-100">
+    <!-- ───────── SKILLS ───────── -->
+    <section id="skills" class="bg-gray-100 py-14">
         <div class="container mx-auto px-4">
-            <h2 class="text-3xl font-bold text-center mb-8" style="--delay: 1">Technical Skills</h2>
+            <h2 class="text-3xl font-bold text-center mb-8">Technical Skills</h2>
             <div class="grid md:grid-cols-3 gap-6">
-                <div class="card p-6" style="--delay: 2">
-                    <h3 class="text-xl font-semibold mb-4">Security & Networking</h3>
-                    <div class="card-content">
-                        <ul class="list-disc list-inside text-gray-700">
-                            <li>Kali Linux</li>
-                            <li>Nmap</li>
-                            <li>Wireshark</li>
-                            <li>Burp Suite</li>
-                            <li>Basic Metasploit</li>
-                            <li>TCP/IP Fundamentals</li>
-                        </ul>
-                    </div>
+                <!-- Security & Networking -->
+                <div class="bg-white shadow-md rounded-md p-6">
+                    <h3 class="text-xl font-semibold mb-4">Security &amp; Networking</h3>
+                    <ul class="list-disc list-inside text-gray-700 space-y-1">
+                        <li>Kali Linux &nbsp;•&nbsp; Nmap &nbsp;•&nbsp; Wireshark</li>
+                        <li>Burp Suite &nbsp;•&nbsp; basic Metasploit</li>
+                        <li>TCP/IP fundamentals</li>
+                    </ul>
                 </div>
-                <div class="card p-6" style="--delay: 3">
-                    <h3 class="text-xl font-semibold mb-4">Programming Languages</h3>
-                    <div class="card-content">
-                        <ul class="list-disc list-inside text-gray-700">
-                            <li>Python</li>
-                            <li>JavaScript/Node.js</li>
-                            <li>Bash</li>
-                            <li>C++</li>
-                        </ul>
-                    </div>
+
+                <!-- Programming Languages -->
+                <div class="bg-white shadow-md rounded-md p-6">
+                    <h3 class="text-xl font-semibold mb-4">Programming&nbsp;Languages</h3>
+                    <ul class="list-disc list-inside text-gray-700 space-y-1">
+                        <li>Python</li>
+                        <li>JavaScript&nbsp;/&nbsp;Node.js</li>
+                        <li>Bash</li>
+                        <li>C++</li>
+                    </ul>
                 </div>
-                <div class="card p-6" style="--delay: 4">
-                    <h3 class="text-xl font-semibold mb-4">Development Tools</h3>
-                    <div class="card-content">
-                        <ul class="list-disc list-inside text-gray-700">
-                            <li>Git</li>
-                            <li>Docker</li>
-                            <li>VirtualBox</li>
-                            <li>Linux/Ubuntu</li>
-                            <li>Basic SQL</li>
-                        </ul>
-                    </div>
+
+                <!-- Dev Tools -->
+                <div class="bg-white shadow-md rounded-md p-6">
+                    <h3 class="text-xl font-semibold mb-4">Dev&nbsp;&amp;&nbsp;Tools</h3>
+                    <ul class="list-disc list-inside text-gray-700 space-y-1">
+                        <li>Git &nbsp;•&nbsp; Docker (intro)</li>
+                        <li>VirtualBox labs</li>
+                        <li>Linux&nbsp;/&nbsp;Ubuntu CLI</li>
+                        <li>Basic SQL</li>
+                    </ul>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Projects Section -->
-    <section id="projects" class="bg-white">
+    <!-- ───────── PROJECTS ───────── -->
+    <section id="projects" class="bg-white py-14">
         <div class="container mx-auto px-4">
-            <h2 class="text-3xl font-bold text-center mb-8" style="--delay: 1">Security-Focused Projects</h2>
+            <h2 class="text-3xl font-bold text-center mb-8">Security-Focused Projects</h2>
+
             <div class="grid md:grid-cols-2 gap-6">
-                <div class="project-card card p-6" style="--delay: 2">
-                    <h3 class="text-xl font-semibold mb-4">Translator Buddy</h3>
-                    <div class="project-card-content flex-grow">
-                        <p class="text-gray-700 mb-4">
-                            Web-based voice translation app with a focus on secure, cross-platform communication.
-                        </p>
-                        <ul class="list-disc list-inside text-gray-700 mb-4">
-                            <li>Implemented multi-language support</li>
-                            <li>Utilized Web Speech and Audio APIs securely</li>
-                            <li>Designed with responsive security in mind</li>
-                        </ul>
-                    </div>
-                    <a href="https://github.com/namkha-yolo/translator-buddy" target="_blank" class="text-blue-600 hover:underline mt-auto">
+                <!-- Automated Vulnerability Scanner -->
+                <div class="bg-gray-50 border border-gray-200 shadow-sm rounded-md p-6 flex flex-col">
+                    <h3 class="text-xl font-semibold mb-4">Automated Vulnerability Scanner</h3>
+                    <p class="text-gray-700 mb-4 flex-grow">
+                        Python script that parses Nmap XML and generates an HTML risk dashboard; my first dive
+                        into automating recon &amp; reporting.
+                    </p>
+                    <ul class="list-disc list-inside text-gray-700 mb-4 space-y-1">
+                        <li>Runs scheduled scans on home lab</li>
+                        <li>Ranks open ports by CVE severity</li>
+                    </ul>
+                    <a href="https://github.com/namkha-yolo/auto-vuln-scanner" target="_blank" class="text-blue-600 hover:underline mt-auto">
                         View Project <i class="fab fa-github ml-2"></i>
                     </a>
                 </div>
-                <div class="project-card card p-6" style="--delay: 3">
-                    <h3 class="text-xl font-semibold mb-4">Peace Vase Project Database</h3>
-                    <div class="project-card-content flex-grow">
-                        <p class="text-gray-700 mb-4">
-                            Implemented security improvements for a multi-country volunteer database.
-                        </p>
-                        <ul class="list-disc list-inside text-gray-700 mb-4">
-                            <li>Moved sensitive columns to private tabs</li>
-                            <li>Created duplicate entry detection script</li>
-                            <li>Developed local data storage iOS app</li>
-                        </ul>
-                    </div>
-                    <a href="https://github.com/namkha-yolo/peace-vase-project" target="_blank" class="text-blue-600 hover:underline mt-auto">
+
+                <!-- Mini-SIEM on ELK -->
+                <div class="bg-gray-50 border border-gray-200 shadow-sm rounded-md p-6 flex flex-col">
+                    <h3 class="text-xl font-semibold mb-4">Mini-SIEM on ELK</h3>
+                    <p class="text-gray-700 mb-4 flex-grow">
+                        Single-node ELK stack that ingests Linux syslog and Suricata IDS events, then
+                        posts Slack alerts on brute-force spikes.
+                    </p>
+                    <ul class="list-disc list-inside text-gray-700 mb-4 space-y-1">
+                        <li>Docker-Compose deployment</li>
+                        <li>Kibana visualizations for SSH failures</li>
+                    </ul>
+                    <a href="https://github.com/namkha-yolo/mini-siem-elk" target="_blank" class="text-blue-600 hover:underline mt-auto">
+                        View Project <i class="fab fa-github ml-2"></i>
+                    </a>
+                </div>
+
+                <!-- Home Pentest Lab -->
+                <div class="bg-gray-50 border border-gray-200 shadow-sm rounded-md p-6 flex flex-col">
+                    <h3 class="text-xl font-semibold mb-4">Home Pentest Lab</h3>
+                    <p class="text-gray-700 mb-4 flex-grow">
+                        VirtualBox environment (Kali Linux + Metasploitable) used to practice scanning,
+                        enumeration, and first exploit chain.
+                    </p>
+                    <ul class="list-disc list-inside text-gray-700 mb-4 space-y-1">
+                        <li>Nmap, Enum4linux, basic Metasploit</li>
+                        <li>Write-up with remediation steps</li>
+                    </ul>
+                    <a href="https://github.com/namkha-yolo/home-pentest-lab" target="_blank" class="text-blue-600 hover:underline mt-auto">
+                        View Project <i class="fab fa-github ml-2"></i>
+                    </a>
+                </div>
+
+                <!-- Phishing URL Checker -->
+                <div class="bg-gray-50 border border-gray-200 shadow-sm rounded-md p-6 flex flex-col">
+                    <h3 class="text-xl font-semibold mb-4">Phishing URL Checker</h3>
+                    <p class="text-gray-700 mb-4 flex-grow">
+                        Simple CLI tool that screens URLs against regex patterns and the VirusTotal public API,
+                        then labels them safe or suspicious.
+                    </p>
+                    <ul class="list-disc list-inside text-gray-700 mb-4 space-y-1">
+                        <li>Built in Python (requests + VT API)</li>
+                        <li>Great intro to IoC look-ups</li>
+                    </ul>
+                    <a href="https://github.com/namkha-yolo/phish-url-checker" target="_blank" class="text-blue-600 hover:underline mt-auto">
                         View Project <i class="fab fa-github ml-2"></i>
                     </a>
                 </div>
@@ -144,35 +182,34 @@
         </div>
     </section>
 
-    <!-- Contact Section -->
-    <section id="contact" class="bg-blue-600 text-white">
+    <!-- ───────── CONTACT ───────── -->
+    <section id="contact" class="bg-blue-600 text-white py-14">
         <div class="container mx-auto px-4 text-center">
-            <h2 class="text-3xl font-bold mb-6" style="--delay: 1">Get in Touch</h2>
-            <p class="text-xl mb-6" style="--delay: 2">Interested in discussing cybersecurity opportunities or collaboration?</p>
-            <div class="space-x-4" style="--delay: 3">
-                <a href="mailto:oedzernamkha@gmail.com" class="btn btn-primary">
-                    <i class="fas fa-envelope mr-2"></i>Email Me
+            <h2 class="text-3xl font-bold mb-6">Get in Touch</h2>
+            <p class="text-lg mb-6">Interested in an internship or collaboration? Drop me a line!</p>
+
+            <div class="flex justify-center space-x-4">
+                <a href="mailto:oedzernamkha@gmail.com" class="bg-white text-blue-600 px-4 py-2 rounded-md hover:bg-gray-100 flex items-center">
+                    <i class="fas fa-envelope mr-2"></i>Email
                 </a>
-                <a href="https://www.linkedin.com/in/namkha-tashi-oedzer" target="_blank" class="btn btn-primary">
-                    <i class="fab fa-linkedin mr-2"></i>Connect on LinkedIn
+                <a href="https://www.linkedin.com/in/namkha-tashi-oedzer" target="_blank" class="bg-white text-blue-600 px-4 py-2 rounded-md hover:bg-gray-100 flex items-center">
+                    <i class="fab fa-linkedin mr-2"></i>LinkedIn
                 </a>
             </div>
         </div>
     </section>
 
-    <!-- Footer -->
-    <footer class="bg-gray-900 text-white py-4 text-center">
-        <p>&copy; 2025 Namkha Tashi Oedzer. All rights reserved.</p>
+    <!-- ───────── FOOTER ───────── -->
+    <footer class="bg-gray-900 text-gray-300 py-4 text-center text-sm">
+        © 2025 Namkha Tashi Oedzer. All rights reserved.
     </footer>
 
+    <!-- Smooth-scroll -->
     <script>
-        // Smooth scrolling for navigation links
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function (e) {
+            anchor.addEventListener('click', e => {
                 e.preventDefault();
-                document.querySelector(this.getAttribute('href')).scrollIntoView({
-                    behavior: 'smooth'
-                });
+                document.querySelector(anchor.getAttribute('href')).scrollIntoView({ behavior: 'smooth' });
             });
         });
     </script>
