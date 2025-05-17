@@ -3,163 +3,199 @@
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
-  <title>Namkha’s Portfolio</title>
-  <!-- Favicon -->
-  <link rel="icon" type="image/png" sizes="32x32" href="apple-touch-icon.png">
+  <title>Namkha’s Terminal Portfolio</title>
+  <link rel="icon" type="image/png" sizes="32x32" href="cyber-favicon-green.png">
   <style>
-    /* Reset and base */
     html, body {
-      margin: 0; padding: 0;
-      width: 100%; height: 100%;
-      background: #000;
-      color: #0f0;
-      font-family: monospace;
-      overflow: hidden;
+      margin:0; padding:0;
+      width:100%; height:100%;
+      background:#000; color:#0f0;
+      font-family:monospace;
+      overflow:hidden;
     }
-    /* Terminal container */
     #terminal {
-      box-sizing: border-box;
-      padding: 12px;
-      height: 100vh;
-      overflow-y: auto;
-      white-space: pre-wrap;
-      line-height: 1.4;
-      font-size: 1rem;
+      box-sizing:border-box;
+      padding:12px;
+      height:100vh;
+      overflow-y:auto;
+      white-space:pre-wrap;
+      line-height:1.4;
+      font-size:1rem;
     }
-    /* Prompt line */
     .prompt {
-      display: flex;
-      align-items: center;
-      margin-top: 4px;
+      display:flex; align-items:center; margin-top:4px;
     }
-    .prompt-user {
-      margin-right: 6px;
-    }
-    .prompt-symbol {
-      margin-right: 6px;
-    }
+    .prompt-user { margin-right:6px; }
+    .prompt-symbol { margin-right:6px; }
     .prompt-input {
-      flex: 1;
-      background: transparent;
-      border: none;
-      color: #0f0;
-      font-family: inherit;
-      font-size: inherit;
-      outline: none;
+      flex:1; background:transparent; border:none;
+      color:#0f0; font-family:inherit; font-size:inherit;
+      outline:none;
     }
-    /* Blinking block cursor */
     .cursor {
-      display: inline-block;
-      width: 8px;
-      height: 1em;
-      background: #0f0;
-      margin-left: 2px;
-      animation: blink 1s steps(2, start) infinite;
-      vertical-align: bottom;
+      width:8px; height:1em; background:#0f0;
+      margin-left:2px; animation:blink 1s steps(2,start) infinite;
     }
     @keyframes blink {
-      0%, 50% { opacity: 1; }
-      51%, 100% { opacity: 0; }
+      0%,50% {opacity:1;} 51%,100% {opacity:0;}
     }
-    /* Links remain green */
     a, a:visited {
-      color: #0f0;
-      text-decoration: underline;
+      color:#0f0; text-decoration:underline;
     }
-    a:hover {
-      color: #fff;
-      text-decoration: none;
-    }
+    a:hover { color:#fff; text-decoration:none; }
   </style>
 </head>
 <body>
   <div id="terminal"></div>
   <script>
-    (function(){
-      const term = document.getElementById('terminal');
+  (function(){
+    const term = document.getElementById('terminal');
+    let history = JSON.parse(localStorage.getItem('term_history')||'[]');
+    let histIndex = history.length;
 
-      const commands = {
-        help: `Available commands:
-  help      – well.. type this to get help..
-  about     – who am I?
-  skills    – what do I know?
-  projects  – what did I build?
-  contact   – how do you reach me?
-  clear     – clear the screen`,
-        about: `Namkha Tashi Oedzer
-CS Student @ Hunter College
-Cybersecurity enthusiast & ethical hacker.`,
-        skills: `Skills:
+    // Simulated filesystem
+    let cwd = '/';
+    const fs = {
+      '/': ['resume.txt','projects','skills.txt','contact.txt'],
+      '/projects': ['network_scanner.md','mini_siem.md','password_analyzer.md','waf.md']
+    };
+
+    // File contents
+    const files = {
+      'resume.txt': 'Download resume: <a href="resume.pdf" target="_blank">resume.pdf</a>',
+      'skills.txt': `Skills:
 - Python, JavaScript/Node.js, Bash, C++
 - Kali Linux, Nmap, Burp Suite, Wireshark, Metasploit (basic)
-- Git, Docker, VirtualBox, Linux, SQL`,
-        projects: `Projects:
-• Network Vulnerability Scanner
-• Mini SIEM on ELK
-• Password Security Analyzer
-• Web Application Firewall`,
-         contact: `Contact:
-Email: <a href="mailto:oedzernamkha@gmail.com">click to main ~oedzernamkha@gmail.com</a>
-GitHub: <a href="https://github.com/namkha-yolo" target="_blank">click for github.com</a>
-LinkedIn: <a href="https://linkedin.com/in/namkha-tashi-oedzer" target="_blank">click for linkedin.com</a>`
+- Git, Docker, VirtualBox, Linux`,
+      'contact.txt': `Contact:
+Email: <a href="mailto:oedzernamkha@gmail.com">oedzernamkha@gmail.com</a>
+GitHub: <a href="https://github.com/namkha-yolo" target="_blank">github.com/namkha-yolo</a>
+LinkedIn: <a href="https://linkedin.com/in/namkha-tashi-oedzer" target="_blank">linkedin.com/in/namkha-tashi-oedzer</a>`,
+      'network_scanner.md': `Network Vulnerability Scanner:
+Python + Nmap, HTML report. CLI flags & custom configs.`,
+      'mini_siem.md': `Mini SIEM on ELK:
+Docker ELK + Suricata, brute-force detection, Slack alert.`,
+      'password_analyzer.md': `Password Security Analyzer:
+Strength checker, breach DB lookup, secure CLI.`,
+      'waf.md': `Web Application Firewall:
+Python proxy, blocks SQLi/XSS via pattern rules.`
+    };
 
-      };
+    // Commands
+    const commands = {
+      help: `Available commands:
+  help       – show this help
+  ascii      – show ASCII banner
+  ls         – list files/directories
+  cd <dir>   – change directory (.. to go up)
+  cat <file> – view file or download
+  resume     – alias for cat resume.txt
+  about      – who I am
+  skills     – what I know
+  projects   – list project links
+  contact    – how to reach me
+  clear      – clear the screen`,
+      ascii: `   _   _                          _       
+  | \\ | |_   _ _ __   ___ _ __ __| | ___  
+  |  \\| | | | | '_ \\ / _ \\ '__/ _\` |/ _ \\ 
+  | |\\  | |_| | |_) |  __/ | | (_| |  __/ 
+  |_| \\_|\\__, | .__/ \\___|_|  \\__,_|\\___| 
+          |___/|_|                         `,
+      about: `Namkha Tashi Oedzer
+CS Student @ Hunter College
+Cybersecurity enthusiast & ethical hacker.`,
+      projects: `Projects:
+• Network Vulnerability Scanner – https://github.com/namkha-yolo/network-scanner
+• Mini SIEM on ELK              – https://github.com/namkha-yolo/mini-siem-elk
+• Password Security Analyzer    – https://github.com/namkha-yolo/password-analyzer
+• Web Application Firewall      – https://github.com/namkha-yolo/web-waf`
+    };
 
-      // Append a line of text (with newline support)
-      function append(text = '') {
-        term.innerHTML += text.replace(/\n/g, '<br/>') + '<br/>';
-        term.scrollTop = term.scrollHeight;
+    function saveHistory(cmd) {
+      history.push(cmd);
+      localStorage.setItem('term_history', JSON.stringify(history));
+      histIndex = history.length;
+    }
+
+    function append(text='') {
+      term.innerHTML += text.replace(/\n/g,'<br/>') + '<br/>';
+      term.scrollTop = term.scrollHeight;
+    }
+
+    function handle(cmd) {
+      if (cmd === 'clear') {
+        term.innerHTML = '';
+        return;
       }
-
-      // Handle entered command
-      function handleCommand(cmd) {
-        if (cmd === 'clear') {
-          term.innerHTML = '';
-          return;
+      if (cmd==='resume') return append(files['resume.txt']);
+      if (cmd.startsWith('cd ')) {
+        let dir = cmd.split(' ')[1];
+        if (dir==='..') { cwd = '/'; }
+        else if (fs[cwd+'/'+dir]) cwd += (cwd==='/'?'':'/')+dir;
+        else return append(`cd: no such file or directory: ${dir}`);
+        return;
+      }
+      if (cmd==='ls') {
+        const list = fs[cwd] || [];
+        return append(list.join('   '));
+      }
+      if (cmd.startsWith('cat ')) {
+        let f = cmd.split(' ')[1];
+        let path = (cwd==='/'?'/':cwd+'/')+f;
+        if (cwd!=='/' && fs[cwd] && fs[cwd].includes(f) && files[f]) {
+          return append(files[f]);
         }
-        if (commands[cmd]) {
-          append(commands[cmd]);
-        } else if (cmd.trim()) {
-          append(`bash: ${cmd}: command not found`);
+        if (f==='resume.txt') return append(files['resume.txt']);
+        return append(`cat: ${f}: No such file`);
+      }
+      if (commands[cmd]) return append(commands[cmd]);
+      if (cmd.trim()!=='') return append(`bash: ${cmd}: command not found`);
+    }
+
+    function prompt() {
+      const line = document.createElement('div');
+      line.className='prompt';
+      line.innerHTML =
+        `<span class="prompt-user">namkha@portfolio${cwd==='/'?'':' '+cwd}</span>`+
+        `<span class="prompt-symbol">$</span>`+
+        `<input class="prompt-input" autofocus />`+
+        `<span class="cursor"></span>`;
+      term.appendChild(line);
+
+      const input = line.querySelector('input');
+      input.addEventListener('keydown', e=>{
+        if (e.key==='Enter') {
+          const cmd = input.value.trim();
+          input.disabled = true;
+          line.querySelector('.cursor').remove();
+          append(`namkha@portfolio${cwd==='/'?'':' '+cwd} $ ${cmd}`);
+          saveHistory(cmd);
+          handle(cmd.toLowerCase());
+          prompt();
         }
-      }
-
-      // Show a new prompt line
-      function prompt() {
-        const line = document.createElement('div');
-        line.className = 'prompt';
-        line.innerHTML =
-          `<span class="prompt-user">namkha@portfolio</span>` +
-          `<span class="prompt-symbol">$</span>` +
-          `<input class="prompt-input" autofocus />` +
-          `<span class="cursor"></span>`;
-        term.appendChild(line);
-
-        const input = line.querySelector('.prompt-input');
-        input.addEventListener('keydown', e => {
-          if (e.key === 'Enter') {
-            const cmd = input.value.trim().toLowerCase();
-            input.disabled = true;
-            line.querySelector('.cursor').remove();
-            append(`namkha@portfolio $ ${cmd}`);
-            handleCommand(cmd);
-            prompt();
-          }
-        });
-        input.focus();
-      }
-
-      // Re-focus input on click
-      term.addEventListener('click', () => {
-        const inp = term.querySelector('input.prompt-input:enabled');
-        if (inp) inp.focus();
+        // history navigation
+        if (e.key==='ArrowUp') {
+          if (histIndex>0) histIndex--;
+          input.value = history[histIndex]||'';
+        }
+        if (e.key==='ArrowDown') {
+          if (histIndex<history.length-1) histIndex++;
+          input.value = history[histIndex]||'';
+        }
       });
+      input.focus();
+    }
 
-      // Initial greeting
-      append("Welcome to Namkha’s Portfolio");
-      append("Type 'help' and hit Enter.");
-      prompt();
-    })();
+    term.addEventListener('click', ()=> {
+      const inp = term.querySelector('input.prompt-input:enabled');
+      if (inp) inp.focus();
+    });
+
+    // Initial banner & prompt
+    append(commands.ascii);
+    append("Type 'help' and press Enter.");
+    prompt();
+  })();
   </script>
 </body>
 </html>
