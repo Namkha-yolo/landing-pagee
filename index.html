@@ -38,7 +38,7 @@
       padding: 0.6rem 1.3rem;
       border-radius: 100px;
       transition: background 0.2s;
-      text-shadow: var(--glow);
+      /*text-shadow: var(--glow);*/
       font-size: 1.1rem;
       letter-spacing: 0.03em;
     }
@@ -54,7 +54,7 @@
     h1, h2, h3 {
       font-family: 'Source Code Pro', monospace;
       color: var(--green);
-      text-shadow: var(--glow);
+      /*text-shadow: var(--glow);*/
       margin: 0 0 1rem 0;
       letter-spacing: 2px;
     }
@@ -108,7 +108,7 @@
       font-family: inherit;
       font-weight: bold;
       margin: 1rem 0.5rem 0 0;
-      text-shadow: var(--glow);
+      /*text-shadow: var(--glow);*/
       box-shadow: 0 0 8px #33ff3344;
       transition: background 0.18s, color 0.18s;
       cursor: pointer;
@@ -243,6 +243,16 @@
       </div>
     </div>
   </section>
+
+  <section id="terminal" class="panel" style="max-width:700px; margin: 2rem auto 2.5rem auto; background:#080e08; border:1.5px solid #33ff33;">
+    <h2 style="font-family:'Source Code Pro',monospace;color:#33ff33;text-shadow:0 0 12px #33ff33">Terminal</h2>
+      <div id="terminal-output" style="min-height:200px;font-family:'Source Code Pro',monospace;color:#33ff33;background:#080e08;padding:1rem 1.2rem;white-space:pre-wrap;overflow-y:auto;"></div>
+        <form id="terminal-form" autocomplete="off" style="margin-top:1.1rem;display:flex;">
+          <span style="font-family:'Source Code Pro',monospace;color:#33ff33;font-weight:bold;">$&nbsp;</span>
+          <input id="terminal-input" type="text" autofocus style="flex:1;border:none;background:#101c10;color:#33ff33;font-size:1.07rem;padding:0.35rem 0.6rem;font-family:'Source Code Pro',monospace;outline:none;">
+        </form>
+  </section>
+
 
   <!-- Contact Section -->
   <section id="contact">
