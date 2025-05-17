@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -82,6 +83,12 @@
     .error {
       color: #f00;
     }
+    .directory {
+      color: #0af;
+    }
+    .file {
+      color: #0f0;
+    }
     /* Responsive adjustments */
     @media (max-width: 600px) {
       #terminal {
@@ -99,6 +106,21 @@
     let history = JSON.parse(localStorage.getItem('term_history') || '[]');
     let histIndex = history.length;
     let currentTheme = 'dark';
+
+    // Detailed filesystem structure
+    const fs = {
+      '/': {
+        type: 'directory',
+        contents: ['resume.txt', 'projects', 'skills.txt', 'contact.txt', 'intro.txt', 'achievements.txt']
+      },
+      '/projects': {
+        type: 'directory',
+        contents: ['network_scanner.md', 'mini_siem.md', 'password_analyzer.md', 'waf.md', 'cybersec_tools.md']
+      }
+    };
+
+    // Current working directory
+    let cwd = '/';
 
     // Define content directly in the script to ensure it's always available
     const content = {
@@ -149,8 +171,8 @@ Certifications & Training:
 Contact Channels:
 Email:     <a href="mailto:oedzernamkha@gmail.com">oedzernamkha@gmail.com</a>
 GitHub:    <a href="https://github.com/namkha-yolo" target="_blank">github.com/namkha-yolo</a>
-LinkedIn:  <a href="https://www.linkedin.com/in/namkha-oedzer-717882221/" target="_blank">linkedin.com/in/namkha-tashi-oedzer</a>
-Portfolio: <a href="https://namkha-yolo.github.io/landing-pagee/" target="_blank">namkha.dev</a>
+LinkedIn:  <a href="https://linkedin.com/in/namkha-tashi-oedzer" target="_blank">linkedin.com/in/namkha-tashi-oedzer</a>
+Portfolio: <a href="https://namkha.dev" target="_blank">namkha.dev</a>
 
 Preferred Communication:
 - Professional inquiries via LinkedIn
@@ -195,12 +217,6 @@ Interests Beyond Tech:
 - Open-Source Advocacy
 - Cybersecurity Education
 - Mountain Hiking & Photography`
-    };
-
-    // Filesystem definition
-    const fs = {
-      '/': ['resume.txt', 'projects', 'skills.txt', 'contact.txt', 'intro.txt', 'achievements.txt'],
-      '/projects': ['network_scanner.md', 'mini_siem.md', 'password_analyzer.md', 'waf.md', 'cybersec_tools.md']
     };
 
     // Commands definition
@@ -269,22 +285,50 @@ Interests Beyond Tech:
       }
 
       if (cmd === 'ls') {
-        const list = fs[cwd] || [];
-        append(list.join('   '));
+        // Get the current directory's contents
+        const currentDir = fs[cwd];
+        if (currentDir && currentDir.contents) {
+          // Create a formatted list with directories and files
+          const formattedContents = currentDir.contents.map(item => {
+            // Check if the item is a directory
+            const isDir = fs[`/${item}`] && fs[`/${item}`].type === 'directory';
+            return `<span class="${isDir ? 'directory' : 'file'}">${item}${isDir ? '/' : ''}</span>`;
+          }).join('    ');
+          append(formattedContents);
+        } else {
+          append('No contents found', 'error');
+        }
         return;
       }
 
       if (cmd.startsWith('cd ')) {
         let dir = cmd.split(' ')[1];
-        if (dir==='..') { cwd = '/'; }
-        else if (fs[cwd+'/'+dir]) cwd += (cwd==='/'?'':'/')+dir;
-        else append(`cd: no such file or directory: ${dir}`, 'error');
+        
+        // Handle going up a directory
+        if (dir === '..') {
+          cwd = '/';
+          append(`Changed directory to ${cwd}`, 'highlight');
+          return;
+        }
+
+        // Check if the directory exists
+        const fullPath = (cwd === '/' ? '/' : cwd + '/') + dir;
+        if (fs[fullPath] && fs[fullPath].type === 'directory') {
+          cwd = fullPath;
+          append(`Changed directory to ${cwd}`, 'highlight');
+        } else {
+          append(`cd: no such file or directory: ${dir}`, 'error');
+        }
         return;
       }
 
       if (cmd.startsWith('cat ')) {
         let f = cmd.split(' ')[1];
-        // Check for specific content files
+        
+        // Construct full path
+        const fullPath = (cwd === '/' ? '/' : cwd + '/') + f;
+        
+        // Direct content files
         if (f === 'skills.txt') {
           append(content.skills);
           return;
@@ -293,6 +337,7 @@ Interests Beyond Tech:
           append(content.contact);
           return;
         }
+        
         append(`cat: ${f}: No such file`, 'error');
         return;
       }
@@ -317,7 +362,7 @@ Interests Beyond Tech:
       const line = document.createElement('div');
       line.className='prompt';
       line.innerHTML =
-        `<span class="prompt-user">namkha@portfolio$</span>`+
+        `<span class="prompt-user">namkha@portfolio:${cwd}$</span>`+
         `<span class="prompt-symbol">$</span>`+
         `<input class="prompt-input" autofocus />`+
         `<span class="cursor"></span>`;
@@ -329,7 +374,7 @@ Interests Beyond Tech:
           const cmd = input.value.trim();
           input.disabled = true;
           line.querySelector('.cursor').remove();
-          append(`namkha@portfolio $ ${cmd}`);
+          append(`namkha@portfolio:${cwd}$ ${cmd}`);
           saveHistory(cmd);
           handle(cmd.toLowerCase());
           prompt();
