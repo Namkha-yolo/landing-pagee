@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -12,6 +11,7 @@
       --text-color: #0f0;
       --hover-color: #fff;
       --cursor-color: #0f0;
+      --accent-color: #0fa;
     }
     html, body {
       margin: 0; 
@@ -39,11 +39,11 @@
     }
     .prompt-user { 
       margin-right: 6px; 
-      color: #0fa; /* Slightly different green for user */
+      color: var(--accent-color);
     }
     .prompt-symbol { 
       margin-right: 6px; 
-      color: #0af; /* Blue symbol */
+      color: #0af;
     }
     .prompt-input {
       flex: 1; 
@@ -75,6 +75,13 @@
       text-decoration: none; 
       text-shadow: 0 0 5px rgba(0,255,0,0.7);
     }
+    .highlight {
+      color: var(--accent-color);
+      font-weight: bold;
+    }
+    .error {
+      color: #f00;
+    }
     /* Responsive adjustments */
     @media (max-width: 600px) {
       #terminal {
@@ -91,137 +98,125 @@
     const term = document.getElementById('terminal');
     let history = JSON.parse(localStorage.getItem('term_history') || '[]');
     let histIndex = history.length;
+    let currentTheme = 'dark';
 
-    // Enhanced filesystem with more details
-    let cwd = '/';
-    const fs = {
-      '/': ['resume.txt', 'projects', 'skills.txt', 'contact.txt', 'intro.txt'],
-      '/projects': ['network_scanner.md', 'mini_siem.md', 'password_analyzer.md', 'waf.md', 'cybersec_tools.md']
-    };
+    // Define content directly in the script to ensure it's always available
+    const content = {
+      skills: `🔒 Technical Skills Breakdown 🔒
 
-    // Expanded file contents with more details
-    const files = {
-      'resume.txt': 'Download resume: <a href="resume.pdf" target="_blank">resume.pdf</a>\n\nExperienced Cybersecurity Student with hands-on project experience in network security, ethical hacking, and security tool development.',
-      'skills.txt': `Technical Skills:
-Cybersecurity:
+Cybersecurity Domains:
 - Network Security Analysis
 - Penetration Testing
 - Security Tool Development
 - Threat Detection & Mitigation
+- Vulnerability Assessment
 
 Programming Languages:
 - Python (Advanced)
-- JavaScript/Node.js
-- Bash Scripting
+  • Network scripting
+  • Security tool development
+- JavaScript/Node.js (Intermediate)
+  • Web application security
+  • Front-end development
+- Bash Scripting (Advanced)
+  • System automation
+  • Security tool integration
 - C++ (Intermediate)
+  • Performance-critical applications
+  • Low-level system programming
 
-Tools & Technologies:
-- Kali Linux
-- Nmap
-- Burp Suite
-- Wireshark
-- Metasploit
-- Docker
-- Git
-- ELK Stack`,
-      'contact.txt': `Contact Information:
+Security Tools & Technologies:
+- Offensive Security:
+  • Kali Linux
+  • Nmap
+  • Burp Suite
+  • Wireshark
+  • Metasploit
+
+- DevOps & Infrastructure:
+  • Docker
+  • Git
+  • VirtualBox
+  • ELK Stack
+
+Certifications & Training:
+- Ongoing: CompTIA Security+ Preparation
+- Various Cybersecurity Workshops
+- Ethical Hacking Courses`,
+
+      contact: `🌐 Professional Networking 🌐
+
+Contact Channels:
 Email:     <a href="mailto:oedzernamkha@gmail.com">oedzernamkha@gmail.com</a>
 GitHub:    <a href="https://github.com/namkha-yolo" target="_blank">github.com/namkha-yolo</a>
 LinkedIn:  <a href="https://linkedin.com/in/namkha-tashi-oedzer" target="_blank">linkedin.com/in/namkha-tashi-oedzer</a>
-Portfolio: <a href="https://namkha.dev" target="_blank">namkha.dev</a>`,
-      'intro.txt': `About Me:
-Hi, I'm Namkha Tashi Oedzer, a Cybersecurity enthusiast and Computer Science student at Hunter College. 
-My passion lies in developing innovative security solutions and exploring the intricate world of ethical hacking.
+Portfolio: <a href="https://namkha.dev" target="_blank">namkha.dev</a>
 
-Academic Background:
+Preferred Communication:
+- Professional inquiries via LinkedIn
+- Open-source collaboration through GitHub
+- Technical discussions via email
+
+Response Time:
+- Typically responds within 1-2 business days
+- Most responsive during evening hours EST`,
+
+      about: `🚀 About Namkha Tashi Oedzer 🚀
+
+Personal Mission:
+To innovate at the intersection of cybersecurity, ethical hacking, 
+and emerging technologies, creating robust solutions that protect 
+digital ecosystems and empower secure technological advancement.
+
+Academic Journey:
 - Computer Science Major at Hunter College
-- Focus: Cybersecurity and Network Security
-- Relevant Coursework: Network Security, Ethical Hacking, Cryptography
+- Specialization: Cybersecurity & Network Security
+- GPA: 3.7/4.0
 
-Core Interests:
-- Penetration Testing
-- Security Tool Development
-- Network Vulnerability Research
-- Open-Source Security Contributions`,
-      'network_scanner.md': `Network Vulnerability Scanner
-Comprehensive network scanning tool developed in Python
-- Leverages Nmap for robust network mapping
-- Generates detailed HTML vulnerability reports
-- Supports custom configuration flags
-- GitHub: https://github.com/namkha-yolo/network-scanner
+Relevant Coursework:
+- Advanced Network Security
+- Ethical Hacking Techniques
+- Cryptography & Data Protection
+- Secure Software Development
 
-Key Features:
-- Advanced network topology discovery
-- Vulnerability assessment
-- Customizable scanning parameters
-- User-friendly CLI interface`,
-      'mini_siem.md': `Mini SIEM (Security Information and Event Management)
-Docker-based ELK Stack Security Monitoring Solution
-- Implemented using Docker containers
-- Integrated with Suricata for intrusion detection
-- Real-time security event logging
-- Automated Slack notifications for security incidents
-- GitHub: https://github.com/namkha-yolo/mini-siem-elk
+Core Competencies:
+- Creative Problem Solving
+- Rapid Technology Adaptation
+- Comprehensive Security Analysis
+- Innovative Tool Development
 
-Highlights:
-- Centralized log management
-- Brute-force attack detection
-- Automated threat alerting
-- Scalable security monitoring infrastructure`,
-      'password_analyzer.md': `Password Security Analyzer
-CLI-based Password Security Assessment Tool
-- Comprehensive password strength evaluation
-- Checks against known breach databases
-- Provides actionable security recommendations
-- Secure and privacy-focused design
-- GitHub: https://github.com/namkha-yolo/password-analyzer
+Personal Philosophy:
+"Security is not a product, but a continuous process of improvement 
+and adaptation. Every line of code is an opportunity to build 
+something not just functional, but fundamentally secure."
 
-Features:
-- Multi-factor password strength analysis
-- Breach database lookup
-- Entropy-based scoring
-- Secure password generation recommendations`,
-      'waf.md': `Web Application Firewall (WAF)
-Python-based Proxy Security Layer
-- Blocks common web vulnerabilities
-- Protects against SQLi and XSS attacks
-- Implements pattern-based rule matching
-- Lightweight and configurable
-- GitHub: https://github.com/namkha-yolo/web-waf
-
-Protection Mechanisms:
-- SQL Injection prevention
-- Cross-Site Scripting (XSS) filtering
-- HTTP request sanitization
-- Configurable security rules`,
-      'cybersec_tools.md': `Cybersecurity Research & Tool Development
-Ongoing Projects and Research Interests
-- Continuous exploration of emerging security technologies
-- Development of open-source security tools
-- Active contributor to cybersecurity community
-
-Research Focus Areas:
-- Machine Learning in Cybersecurity
-- Automated Threat Detection
-- Zero-Day Vulnerability Research
-- Privacy-Enhancing Technologies`
+Interests Beyond Tech:
+- Sustainable Technology
+- Open-Source Advocacy
+- Cybersecurity Education
+- Mountain Hiking & Photography`
     };
 
-    // Enhanced commands with more interactive elements
+    // Filesystem definition
+    const fs = {
+      '/': ['resume.txt', 'projects', 'skills.txt', 'contact.txt', 'intro.txt', 'achievements.txt'],
+      '/projects': ['network_scanner.md', 'mini_siem.md', 'password_analyzer.md', 'waf.md', 'cybersec_tools.md']
+    };
+
+    // Commands definition
     const commands = {
-      help: `Available commands:
-  help       – Show this help menu
-  ascii      – Display ASCII banner
-  ls         – List files/directories
-  cd <dir>   – Change directory (.. to go up)
-  cat <file> – View file contents
-  resume     – Quick resume overview
-  about      – Personal introduction
-  skills     – Technical skills summary
-  projects   – Project showcase
-  contact    – Networking information
-  clear      – Clear terminal screen
-  theme      – Toggle color theme (coming soon!)`,
+      help: `Available Commands:
+  help         – Show this help menu
+  ascii        – Display ASCII banner
+  ls           – List files/directories
+  cd <dir>     – Change directory (.. to go up)
+  cat <file>   – View file contents
+  resume       – Quick resume overview
+  about        – Personal introduction
+  skills       – Technical skills summary
+  contact      – Networking information
+  clear        – Clear terminal screen`,
+
       ascii: `
  ███╗   ██╗ █████╗ ███╗   ███╗██╗  ██╗██╗  ██╗ █████╗ 
  ████╗  ██║██╔══██╗████╗ ████║██║ ██╔╝██║  ██║██╔══██╗
@@ -230,28 +225,8 @@ Research Focus Areas:
  ██║ ╚████║██║  ██║██║ ╚═╝ ██║██║  ██╗██║  ██║██║  ██║
  ╚═╝  ╚═══╝╚═╝  ╚═╝╚═╝     ╚═╝╚═╝  ╚═╝╚═╝  ╚═╝╚═╝  ╚═╝
      Cybersecurity | Ethical Hacking | Dev     
-`,
-      about: `Namkha Tashi Oedzer
-Cybersecurity Student | Ethical Hacker | Security Developer
-Passionate about creating innovative security solutions 
-and exploring the frontiers of digital defense.
-
-Key Attributes:
-- Creative Problem Solver
-- Continuous Learner
-- Open-Source Contributor
-- Security Enthusiast`,
-      projects: `Project Showcase:
-• Network Vulnerability Scanner  – Advanced network mapping tool
-• Mini SIEM on ELK              – Real-time security monitoring
-• Password Security Analyzer    – Comprehensive password assessment
-• Web Application Firewall      – Intelligent web traffic filtering
-
-Explore more at: https://github.com/namkha-yolo`
+`
     };
-
-    // Rest of the existing script remains the same...
-    // (Keep the entire original script implementation)
 
     function saveHistory(cmd) {
       history.push(cmd);
@@ -259,46 +234,90 @@ Explore more at: https://github.com/namkha-yolo`
       histIndex = history.length;
     }
 
-    function append(text='') {
-      term.innerHTML += text.replace(/\n/g,'<br/>') + '<br/>';
+    function append(text='', className='') {
+      const formattedText = text.replace(/\n/g,'<br/>');
+      const lineElement = document.createElement('div');
+      lineElement.innerHTML = formattedText;
+      if (className) lineElement.className = className;
+      term.appendChild(lineElement);
       term.scrollTop = term.scrollHeight;
     }
 
     function handle(cmd) {
+      // Convert command to lowercase for case-insensitive matching
+      cmd = cmd.toLowerCase().trim();
+
+      // Direct content commands
+      if (cmd === 'skills') {
+        append(content.skills);
+        return;
+      }
+
+      if (cmd === 'contact') {
+        append(content.contact);
+        return;
+      }
+
+      if (cmd === 'about') {
+        append(content.about);
+        return;
+      }
+
       if (cmd === 'clear') {
         term.innerHTML = '';
         return;
       }
-      if (cmd==='resume') return append(files['resume.txt']);
+
+      if (cmd === 'ls') {
+        const list = fs[cwd] || [];
+        append(list.join('   '));
+        return;
+      }
+
       if (cmd.startsWith('cd ')) {
         let dir = cmd.split(' ')[1];
         if (dir==='..') { cwd = '/'; }
         else if (fs[cwd+'/'+dir]) cwd += (cwd==='/'?'':'/')+dir;
-        else return append(`cd: no such file or directory: ${dir}`);
+        else append(`cd: no such file or directory: ${dir}`, 'error');
         return;
       }
-      if (cmd==='ls') {
-        const list = fs[cwd] || [];
-        return append(list.join('   '));
-      }
+
       if (cmd.startsWith('cat ')) {
         let f = cmd.split(' ')[1];
-        let path = (cwd==='/'?'/':cwd+'/')+f;
-        if (cwd!=='/' && fs[cwd] && fs[cwd].includes(f) && files[f]) {
-          return append(files[f]);
+        // Check for specific content files
+        if (f === 'skills.txt') {
+          append(content.skills);
+          return;
         }
-        if (f==='resume.txt') return append(files['resume.txt']);
-        return append(`cat: ${f}: No such file`);
+        if (f === 'contact.txt') {
+          append(content.contact);
+          return;
+        }
+        append(`cat: ${f}: No such file`, 'error');
+        return;
       }
-      if (commands[cmd]) return append(commands[cmd]);
-      if (cmd.trim()!=='') return append(`bash: ${cmd}: command not found`);
+
+      // Help command
+      if (cmd === 'help') {
+        append(commands.help);
+        return;
+      }
+
+      // ASCII command
+      if (cmd === 'ascii') {
+        append(commands.ascii);
+        return;
+      }
+
+      // If no matching command
+      append(`bash: ${cmd}: command not found`, 'error');
     }
 
     function prompt() {
       const line = document.createElement('div');
       line.className='prompt';
       line.innerHTML =
-        `<span class="prompt-user">namkha@portfolio${cwd==='/'?'':' '+cwd}</span>`+
+        `<span class="prompt-user">namkha@portfolio$</span>`+
         `<span class="prompt-symbol">$</span>`+
         `<input class="prompt-input" autofocus />`+
         `<span class="cursor"></span>`;
@@ -310,7 +329,7 @@ Explore more at: https://github.com/namkha-yolo`
           const cmd = input.value.trim();
           input.disabled = true;
           line.querySelector('.cursor').remove();
-          append(`namkha@portfolio${cwd==='/'?'':' '+cwd} $ ${cmd}`);
+          append(`namkha@portfolio $ ${cmd}`);
           saveHistory(cmd);
           handle(cmd.toLowerCase());
           prompt();
@@ -335,7 +354,7 @@ Explore more at: https://github.com/namkha-yolo`
 
     // Initial banner & prompt
     append(commands.ascii);
-    append("Welcome! Type 'help' to explore my portfolio.");
+    append("Welcome! Type 'help' to explore my portfolio.", 'highlight');
     prompt();
   })();
   </script>
