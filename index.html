@@ -4,36 +4,41 @@
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
   <title>Namkha’s Terminal Portfolio</title>
-  <link rel="icon" type="image/png" href="cyber-favicon-green.png">
+  <!-- Favicon -->
+  <link rel="icon" type="image/png" sizes="32x32" href="cyber-favicon-green.png">
   <style>
+    /* Reset and base */
     html, body {
       margin: 0; padding: 0;
       width: 100%; height: 100%;
       background: #000;
-      color: #0f0;           /* classic green on black */
+      color: #0f0;
       font-family: monospace;
       overflow: hidden;
     }
+    /* Terminal container */
     #terminal {
       box-sizing: border-box;
-      padding: 10px;
-      height: calc(100vh - 20px);
+      padding: 12px;
+      height: 100vh;
       overflow-y: auto;
       white-space: pre-wrap;
       line-height: 1.4;
       font-size: 1rem;
     }
+    /* Prompt line */
     .prompt {
       display: flex;
       align-items: center;
+      margin-top: 4px;
     }
     .prompt-user {
-      margin-right: 5px;
+      margin-right: 6px;
     }
     .prompt-symbol {
-      margin-right: 5px;
+      margin-right: 6px;
     }
-    input {
+    .prompt-input {
       flex: 1;
       background: transparent;
       border: none;
@@ -42,7 +47,7 @@
       font-size: inherit;
       outline: none;
     }
-    /* blinking block cursor */
+    /* Blinking block cursor */
     .cursor {
       display: inline-block;
       width: 8px;
@@ -56,11 +61,13 @@
       0%, 50% { opacity: 1; }
       51%, 100% { opacity: 0; }
     }
+    /* Links remain green */
     a, a:visited {
       color: #0f0;
       text-decoration: underline;
     }
     a:hover {
+      color: #fff;
       text-decoration: none;
     }
   </style>
@@ -68,75 +75,90 @@
 <body>
   <div id="terminal"></div>
   <script>
-    const term = document.getElementById('terminal');
-    const commands = {
-      help: `Available commands:
-  help      – show this
-  about     – who am I
-  skills    – my toolkit
+    (function(){
+      const term = document.getElementById('terminal');
+
+      const commands = {
+        help: `Available commands:
+  help      – show this help
+  about     – who I am
+  skills    – what I know
   projects  – what I build
-  contact   – get in touch
-  clear     – clear screen`,
-      about: `Namkha Tashi Oedzer
+  contact   – how to reach me
+  clear     – clear the screen`,
+        about: `Namkha Tashi Oedzer
 CS Student @ Hunter College
-Learning by building hands‑on cybersecurity tools.`,
-      skills: `Skills:
-- Python, JavaScript, Bash, C++
-- Kali Linux, Nmap, Burp Suite, Wireshark
-- Git, Docker, VirtualBox, Linux`,
-      projects: `Projects:
+Cybersecurity enthusiast & ethical hacker.`,
+        skills: `Skills:
+- Python, JavaScript/Node.js, Bash, C++
+- Kali Linux, Nmap, Burp Suite, Wireshark, Metasploit (basic)
+- Git, Docker, VirtualBox, Linux, SQL`,
+        projects: `Projects:
 • Network Vulnerability Scanner
 • Mini SIEM on ELK
 • Password Security Analyzer
 • Web Application Firewall`,
-      contact: `Contact:
+        contact: `Contact:
 Email: oedzernamkha@gmail.com
-GitHub: github.com/namkha-yolo`
-    };
+GitHub: github.com/namkha-yolo
+LinkedIn: linkedin.com/in/namkha-tashi-oedzer`
+      };
 
-    function append(text = '') {
-      term.innerHTML += text.replace(/\n/g,'<br/>') + '<br/>';
-      term.scrollTop = term.scrollHeight;
-    }
-
-    function handle(cmd) {
-      if (cmd === 'clear') {
-        term.innerHTML = '';
-      } else if (commands[cmd]) {
-        append(commands[cmd]);
-      } else if (cmd.trim()) {
-        append(`bash: ${cmd}: command not found`);
+      // Append a line of text (with newline support)
+      function append(text = '') {
+        term.innerHTML += text.replace(/\n/g, '<br/>') + '<br/>';
+        term.scrollTop = term.scrollHeight;
       }
-    }
 
-    function prompt() {
-      const line = document.createElement('div');
-      line.className = 'prompt';
-      line.innerHTML = 
-        `<span class="prompt-user">namkha@portfolio</span>` +
-        `<span class="prompt-symbol">$</span>` +
-        `<input autofocus />` +
-        `<span class="cursor"></span>`;
-      term.appendChild(line);
-
-      const input = line.querySelector('input');
-      input.addEventListener('keydown', e => {
-        if (e.key === 'Enter') {
-          const cmd = input.value.trim().toLowerCase();
-          input.disabled = true;
-          line.querySelector('.cursor').remove();
-          append(`namkha@portfolio $ ${cmd}`);
-          handle(cmd);
-          prompt();
+      // Handle entered command
+      function handleCommand(cmd) {
+        if (cmd === 'clear') {
+          term.innerHTML = '';
+          return;
         }
-      });
-      input.focus();
-    }
+        if (commands[cmd]) {
+          append(commands[cmd]);
+        } else if (cmd.trim()) {
+          append(`bash: ${cmd}: command not found`);
+        }
+      }
 
-    // initialize
-    append('Welcome to Namkha’s Cyber Terminal Portfolio');
-    append('Type \'help\' and hit Enter.');
-    prompt();
+      // Show a new prompt line
+      function prompt() {
+        const line = document.createElement('div');
+        line.className = 'prompt';
+        line.innerHTML =
+          `<span class="prompt-user">namkha@portfolio</span>` +
+          `<span class="prompt-symbol">$</span>` +
+          `<input class="prompt-input" autofocus />` +
+          `<span class="cursor"></span>`;
+        term.appendChild(line);
+
+        const input = line.querySelector('.prompt-input');
+        input.addEventListener('keydown', e => {
+          if (e.key === 'Enter') {
+            const cmd = input.value.trim().toLowerCase();
+            input.disabled = true;
+            line.querySelector('.cursor').remove();
+            append(`namkha@portfolio $ ${cmd}`);
+            handleCommand(cmd);
+            prompt();
+          }
+        });
+        input.focus();
+      }
+
+      // Re-focus input on click
+      term.addEventListener('click', () => {
+        const inp = term.querySelector('input.prompt-input:enabled');
+        if (inp) inp.focus();
+      });
+
+      // Initial greeting
+      append("Welcome to Namkha’s Cyber Terminal Portfolio");
+      append("Type 'help' and hit Enter.");
+      prompt();
+    })();
   </script>
 </body>
 </html>
