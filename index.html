@@ -3,369 +3,231 @@
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
-  <title>Namkha's Portfolio</title>
-  <link rel="icon" type="image/png" sizes="32x32" href="cyber-favicon-green.png">
+  <title>Namkha's Terminal Portfolio</title>
   <style>
-    :root {
-      --bg-color: #000;
-      --text-color: #0f0;
-      --hover-color: #fff;
-      --cursor-color: #0f0;
-      --accent-color: #0fa;
+    body {
+      background-color: black;
+      color: green;
+      font-family: monospace;
+      margin: 0;
+      padding: 10px;
     }
-    html, body {
-      margin: 0; 
-      padding: 0;
-      width: 100%; 
-      height: 100%;
-      background: var(--bg-color); 
-      color: var(--text-color);
-      font-family: 'Courier New', Courier, monospace;
-      overflow: hidden;
-    }
-    #terminal {
-      box-sizing: border-box;
-      padding: 12px;
-      height: 100vh;
-      overflow-y: auto;
+    #output {
       white-space: pre-wrap;
-      line-height: 1.4;
-      font-size: 1rem;
+      overflow-y: auto;
+      max-height: calc(100vh - 50px);
     }
-    .prompt {
-      display: flex; 
-      align-items: center; 
-      margin-top: 4px;
-    }
-    .prompt-user { 
-      margin-right: 6px; 
-      color: var(--accent-color);
-    }
-    .prompt-symbol { 
-      margin-right: 6px; 
-      color: #0af;
-    }
-    .prompt-input {
-      flex: 1; 
-      background: transparent; 
+    #input {
+      background: black;
+      color: green;
       border: none;
-      color: var(--text-color); 
-      font-family: inherit; 
-      font-size: inherit;
-      outline: none;
+      width: 100%;
+      font-family: monospace;
     }
-    .cursor {
-      width: 8px; 
-      height: 1em; 
-      background: var(--cursor-color);
-      margin-left: 2px; 
-      animation: blink 1s steps(2,start) infinite;
-    }
-    @keyframes blink {
-      0%, 50% { opacity: 1; }
-      51%, 100% { opacity: 0; }
-    }
-    a, a:visited {
-      color: #0f0; 
+    .link {
+      color: cyan;
       text-decoration: underline;
-      transition: all 0.3s ease;
+      cursor: pointer;
     }
-    a:hover { 
-      color: var(--hover-color); 
-      text-decoration: none; 
-      text-shadow: 0 0 5px rgba(0,255,0,0.7);
-    }
-    .highlight {
-      color: var(--accent-color);
-      font-weight: bold;
-    }
-    .error {
-      color: #f00;
-    }
-    .directory {
-      color: #0af;
-    }
-    .file {
-      color: #0f0;
-    }
-    /* Responsive adjustments */
-    @media (max-width: 600px) {
-      #terminal {
-        font-size: 0.8rem;
-        padding: 8px;
-      }
+    .link:hover {
+      color: white;
     }
   </style>
 </head>
 <body>
-  <div id="terminal"></div>
+  <div id="output"></div>
+  <input type="text" id="input" autofocus>
+
   <script>
-  (function(){
-    const term = document.getElementById('terminal');
-    let history = JSON.parse(localStorage.getItem('term_history') || '[]');
-    let histIndex = history.length;
-    let currentTheme = 'dark';
+  // Content library
+  const content = {
+    help: `Available commands:
+  help         - Show this help menu
+  resume       - View resume details and download options
+  skills       - Show technical skills
+  contact      - Display contact information
+  about        - Personal introduction
+  achievements - Academic and professional achievements
+  clear        - Clear the screen`,
 
-    // Comprehensive filesystem structure
-    const fs = {
-      '/': {
-        type: 'directory',
-        contents: ['resume.txt', 'projects', 'skills.txt', 'contact.txt', 'intro.txt', 'achievements.txt']
-      },
-      '/projects': {
-        type: 'directory',
-        contents: ['network_scanner.md', 'mini_siem.md', 'password_analyzer.md', 'waf.md', 'cybersec_tools.md']
-      }
-    };
+    resume: `Resume for Namkha Tashi Oedzer
 
-    // Current working directory
-    let cwd = '/';
+Download Options:
+- [PDF] Full Resume: <download-pdf>
+- [DOCX] Editable Version: <download-docx>
 
-    // Comprehensive content library (previously defined content remains the same)
-    const content = {
-      // ... (previous content remains unchanged)
-      projects: `🔧 Available Projects 🔧
+Resume Overview:
+Education:
+- Computer Science Major at Hunter College
+- Specialization in Cybersecurity
 
-Project List:
-1. network_scanner   - Network Vulnerability Scanner
-2. mini_siem         - Security Information and Event Management
-3. password_analyzer - Password Security Assessment Tool
-4. waf               - Web Application Firewall
-5. cybersec_tools    - Cybersecurity Research Tools
+Key Projects:
+- Network Vulnerability Scanner
+- Mini SIEM Project
+- Password Security Analyzer
+- Web Application Firewall
 
-Use 'cat projects/[project_name].md' to view details
-Or type 'projects [project_name]' for more information`
-    };
+Professional Experience:
+- Developed multiple security-focused projects
+- Contributed to open-source security tools
+- Intern, Cybersecurity Research Lab`,
 
-    // Comprehensive command definitions
-    const commands = {
-      help: `Available Commands:
-  help         – Show this help menu
-  ascii        – Display ASCII banner
-  ls           – List files/directories
-  cd <dir>     – Change directory (.. to go up)
-  cat <file>   – View file contents
-  resume       – Quick resume overview
-  about        – Personal introduction
-  skills       – Technical skills summary
-  contact      – Networking information
-  projects     – List available projects
-  achievements – Display academic achievements
-  clear        – Clear terminal screen
-  exit         – Close the terminal
-  whoami       – Display current user info`,
+    skills: `Technical Skills:
+Cybersecurity Domains:
+- Network Security Analysis
+- Penetration Testing
+- Security Tool Development
+- Threat Detection & Mitigation
 
-      ascii: `
- ███╗   ██╗ █████╗ ███╗   ███╗██╗  ██╗██╗  ██╗ █████╗ 
- ████╗  ██║██╔══██╗████╗ ████║██║ ██╔╝██║  ██║██╔══██╗
- ██╔██╗ ██║███████║██╔████╔██║█████╔╝ ███████║███████║
- ██║╚██╗██║██╔══██║██║╚██╔╝██║██╔═██╗ ██╔══██║██╔══██║
- ██║ ╚████║██║  ██║██║ ╚═╝ ██║██║  ██╗██║  ██║██║  ██║
- ╚═╝  ╚═══╝╚═╝  ╚═╝╚═╝     ╚═╝╚═╝  ╚═╝╚═╝  ╚═╝╚═╝  ╚═╝
-     Cybersecurity | Ethical Hacking | Dev     
-`
-    };
+Programming Languages:
+- Python (Advanced)
+- JavaScript/Node.js
+- Bash Scripting
+- C++ (Intermediate)
 
-    // Utility functions
-    function saveHistory(cmd) {
-      history.push(cmd);
-      localStorage.setItem('term_history', JSON.stringify(history));
-      histIndex = history.length;
-    }
+Tools & Technologies:
+- Kali Linux
+- Nmap
+- Burp Suite
+- Wireshark
+- Metasploit
+- Docker
+- Git
+- ELK Stack`,
 
-    function append(text='', className='') {
-      const formattedText = text.replace(/\n/g,'<br/>');
-      const lineElement = document.createElement('div');
-      lineElement.innerHTML = formattedText;
-      if (className) lineElement.className = className;
-      term.appendChild(lineElement);
-      term.scrollTop = term.scrollHeight;
-    }
+    contact: `Contact Information:
+Email:     <email>oedzernamkha@gmail.com</email>
+GitHub:    <link>https://github.com/namkha-yolo</link>
+LinkedIn:  <link>https://linkedin.com/in/namkha-tashi-oedzer</link>
+Portfolio: <link>https://namkha.dev</link>
 
-    function handle(cmd) {
-      // Convert command to lowercase for case-insensitive matching
-      cmd = cmd.toLowerCase().trim();
+Preferred Communication:
+- Professional inquiries via LinkedIn
+- Open-source collaboration through GitHub
+- Technical discussions via email`,
 
-      // Split command into parts
-      const [command, ...args] = cmd.split(' ');
+    about: `About Namkha Tashi Oedzer
 
-      // Direct content commands
-      const contentCommands = {
-        'resume': content.resume,
-        'skills': content.skills,
-        'contact': content.contact,
-        'about': content.intro,
-        'achievements': content.achievements
-      };
+🚀 Personal Mission Statement:
+To innovate at the intersection of cybersecurity, 
+ethical hacking, and emerging technologies, creating 
+robust solutions that protect digital ecosystems 
+and empower secure technological advancement.
 
-      if (contentCommands[command]) {
-        append(contentCommands[command]);
-        return;
-      }
+Academic Journey:
+- Computer Science Major at Hunter College
+- Specialization: Cybersecurity & Network Security
+- GPA: 3.7/4.0
 
-      // Projects command with detailed handling
-      if (command === 'projects') {
-        if (args.length === 0) {
-          // List available projects
-          append(content.projects);
-          return;
+Core Competencies:
+- Creative Problem Solving
+- Rapid Technology Adaptation
+- Comprehensive Security Analysis
+- Innovative Tool Development
+
+Personal Philosophy:
+"Security is not a product, but a continuous process 
+of improvement and adaptation."`,
+
+    achievements: `🏆 Academic & Professional Achievements
+
+Cybersecurity Competitions:
+- 2nd Place, HackHunter Collegiate Cybersecurity Challenge
+- Top 10%, National Collegiate Penetration Testing Competition
+- Winner, Hunter College Cyber Defense Workshop Hackathon
+
+Academic Honors:
+- Dean's List (4 consecutive semesters)
+- Outstanding Computer Science Student Award
+- Research Grant for Cybersecurity Innovation Project
+
+Professional Development:
+- Completed Advanced Network Security Certification
+- Speaker at Hunter College Cybersecurity Symposium
+- Intern, Cybersecurity Research Lab`
+  };
+
+  // Get DOM elements
+  const output = document.getElementById('output');
+  const input = document.getElementById('input');
+
+  // Function to display output with interactive elements
+  function displayOutput(text) {
+    // Create a temporary div to handle rich content
+    const tempDiv = document.createElement('div');
+    tempDiv.innerHTML = text.replace(/<download-pdf>/g, '<span class="link" data-download="pdf">Download PDF</span>')
+                             .replace(/<download-docx>/g, '<span class="link" data-download="docx">Download DOCX</span>')
+                             .replace(/<email>(.+?)<\/email>/g, '<span class="link" data-email="$1">$1</span>')
+                             .replace(/<link>(.+?)<\/link>/g, '<span class="link" data-link="$1">$1</span>');
+    
+    // Add event listeners to interactive elements
+    tempDiv.querySelectorAll('.link').forEach(link => {
+      link.addEventListener('click', () => {
+        if (link.dataset.download) {
+          // Simulate download
+          const format = link.dataset.download;
+          displayOutput(`Downloading resume as ${format.toUpperCase()}...`);
+          // In a real implementation, you'd trigger actual file download
         }
-
-        // Specific project details
-        const projectName = args[0];
-        const projectDetails = content.projects[projectName];
-        
-        if (projectDetails) {
-          append(projectDetails);
-          return;
+        if (link.dataset.email) {
+          window.open(`mailto:${link.dataset.email}`);
         }
-
-        append(`Project "${projectName}" not found`, 'error');
-        return;
-      }
-
-      // Specific command handling
-      switch (command) {
-        case 'clear':
-          term.innerHTML = '';
-          return;
-
-        case 'exit':
-          append('Goodbye! Closing terminal...', 'highlight');
-          return;
-
-        case 'whoami':
-          append('namkha@portfolio', 'highlight');
-          return;
-
-        case 'ls':
-          // Get the current directory's contents
-          const currentDir = fs[cwd];
-          if (currentDir && currentDir.contents) {
-            // Create a formatted list with directories and files
-            const formattedContents = currentDir.contents.map(item => {
-              // Check if the item is a directory
-              const isDir = fs[`/${item}`] && fs[`/${item}`].type === 'directory';
-              return `<span class="${isDir ? 'directory' : 'file'}">${item}${isDir ? '/' : ''}</span>`;
-            }).join('    ');
-            append(formattedContents);
-          } else {
-            append('No contents found', 'error');
-          }
-          return;
-
-        case 'cd':
-          const dir = args[0];
-          if (!dir) {
-            append('cd: missing argument', 'error');
-            return;
-          }
-          
-          // Handle going up a directory
-          if (dir === '..') {
-            cwd = '/';
-            append(`Changed directory to ${cwd}`, 'highlight');
-            return;
-          }
-
-          // Check if the directory exists
-          const fullPath = (cwd === '/' ? '/' : cwd + '/') + dir;
-          if (fs[fullPath] && fs[fullPath].type === 'directory') {
-            cwd = fullPath;
-            append(`Changed directory to ${cwd}`, 'highlight');
-          } else {
-            append(`cd: no such file or directory: ${dir}`, 'error');
-          }
-          return;
-
-        case 'cat':
-          const filename = args[0];
-          if (!filename) {
-            append('cat: missing file operand', 'error');
-            return;
-          }
-
-          // Handle different file types
-          const fileContentMap = {
-            'resume.txt': content.resume,
-            'skills.txt': content.skills,
-            'contact.txt': content.contact,
-            'intro.txt': content.intro,
-            'achievements.txt': content.achievements,
-            'network_scanner.md': content.projects.network_scanner,
-            'mini_siem.md': content.projects.mini_siem,
-            'password_analyzer.md': content.projects.password_analyzer,
-            'waf.md': content.projects.waf,
-            'cybersec_tools.md': content.projects.cybersec_tools
-          };
-
-          const fileContent = fileContentMap[filename];
-          if (fileContent) {
-            append(fileContent);
-          } else {
-            append(`cat: ${filename}: No such file or directory`, 'error');
-          }
-          return;
-
-        case 'help':
-          append(commands.help);
-          return;
-
-        case 'ascii':
-          append(commands.ascii);
-          return;
-
-        default:
-          if (cmd.trim() !== '') {
-            append(`bash: ${cmd}: command not found`, 'error');
-          }
-      }
-    }
-
-    function prompt() {
-      const line = document.createElement('div');
-      line.className='prompt';
-      line.innerHTML =
-        `<span class="prompt-user">namkha@portfolio:${cwd}$</span>`+
-        `<span class="prompt-symbol">$</span>`+
-        `<input class="prompt-input" autofocus />`+
-        `<span class="cursor"></span>`;
-      term.appendChild(line);
-
-      const input = line.querySelector('input');
-      input.addEventListener('keydown', e=>{
-        if (e.key==='Enter') {
-          const cmd = input.value.trim();
-          input.disabled = true;
-          line.querySelector('.cursor').remove();
-          append(`namkha@portfolio:${cwd}$ ${cmd}`);
-          saveHistory(cmd);
-          handle(cmd.toLowerCase());
-          prompt();
-        }
-        // history navigation
-        if (e.key==='ArrowUp') {
-          if (histIndex>0) histIndex--;
-          input.value = history[histIndex]||'';
-        }
-        if (e.key==='ArrowDown') {
-          if (histIndex<history.length-1) histIndex++;
-          input.value = history[histIndex]||'';
+        if (link.dataset.link) {
+          window.open(link.dataset.link, '_blank');
         }
       });
-      input.focus();
-    }
-
-    term.addEventListener('click', ()=> {
-      const inp = term.querySelector('input.prompt-input:enabled');
-      if (inp) inp.focus();
     });
 
-    // Initial banner & prompt
-    append(commands.ascii);
-    append("Welcome! Type 'help' to explore my portfolio.", 'highlight');
-    prompt();
-  })();
+    // Append the processed content
+    output.appendChild(tempDiv);
+    output.scrollTop = output.scrollHeight;
+  }
+
+  // Input event listener
+  input.addEventListener('keypress', function(e) {
+    if (e.key === 'Enter') {
+      const command = this.value.toLowerCase().trim();
+      
+      // Echo the command
+      displayOutput(`> ${this.value}`);
+
+      // Handle commands
+      switch(command) {
+        case 'help':
+          displayOutput(content.help);
+          break;
+        case 'resume':
+          displayOutput(content.resume);
+          break;
+        case 'skills':
+          displayOutput(content.skills);
+          break;
+        case 'contact':
+          displayOutput(content.contact);
+          break;
+        case 'about':
+          displayOutput(content.about);
+          break;
+        case 'achievements':
+          displayOutput(content.achievements);
+          break;
+        case 'clear':
+          output.innerHTML = '';
+          break;
+        default:
+          displayOutput(`Command not found: ${command}`);
+      }
+
+      // Clear input
+      this.value = '';
+    }
+  });
+
+  // Initial welcome message
+  displayOutput('Welcome to Namkha\'s Portfolio Terminal');
+  displayOutput('Type "help" to see available commands');
   </script>
 </body>
 </html>
+
+
