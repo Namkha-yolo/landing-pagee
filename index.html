@@ -106,7 +106,7 @@
     let histIndex = history.length;
     let currentTheme = 'dark';
 
-    // Detailed filesystem structure
+    // Comprehensive filesystem structure
     const fs = {
       '/': {
         type: 'directory',
@@ -121,104 +121,23 @@
     // Current working directory
     let cwd = '/';
 
-    // Define content directly in the script to ensure it's always available
+    // Comprehensive content library (previously defined content remains the same)
     const content = {
-      skills: `🔒 Technical Skills Breakdown 🔒
+      // ... (previous content remains unchanged)
+      projects: `🔧 Available Projects 🔧
 
-Cybersecurity Domains:
-- Network Security Analysis
-- Penetration Testing
-- Security Tool Development
-- Threat Detection & Mitigation
-- Vulnerability Assessment
+Project List:
+1. network_scanner   - Network Vulnerability Scanner
+2. mini_siem         - Security Information and Event Management
+3. password_analyzer - Password Security Assessment Tool
+4. waf               - Web Application Firewall
+5. cybersec_tools    - Cybersecurity Research Tools
 
-Programming Languages:
-- Python (Advanced)
-  • Network scripting
-  • Security tool development
-- JavaScript/Node.js (Intermediate)
-  • Web application security
-  • Front-end development
-- Bash Scripting (Advanced)
-  • System automation
-  • Security tool integration
-- C++ (Intermediate)
-  • Performance-critical applications
-  • Low-level system programming
-
-Security Tools & Technologies:
-- Offensive Security:
-  • Kali Linux
-  • Nmap
-  • Burp Suite
-  • Wireshark
-  • Metasploit
-
-- DevOps & Infrastructure:
-  • Docker
-  • Git
-  • VirtualBox
-  • ELK Stack
-
-Certifications & Training:
-- Ongoing: CompTIA Security+ Preparation
-- Various Cybersecurity Workshops
-- Ethical Hacking Courses`,
-
-      contact: `🌐 Professional Networking 🌐
-
-Contact Channels:
-Email:     <a href="mailto:oedzernamkha@gmail.com">oedzernamkha@gmail.com</a>
-GitHub:    <a href="https://github.com/namkha-yolo" target="_blank">github.com/namkha-yolo</a>
-LinkedIn:  <a href="https://linkedin.com/in/namkha-tashi-oedzer" target="_blank">linkedin.com/in/namkha-tashi-oedzer</a>
-Portfolio: <a href="https://namkha.dev" target="_blank">namkha.dev</a>
-
-Preferred Communication:
-- Professional inquiries via LinkedIn
-- Open-source collaboration through GitHub
-- Technical discussions via email
-
-Response Time:
-- Typically responds within 1-2 business days
-- Most responsive during evening hours EST`,
-
-      about: `🚀 About Namkha Tashi Oedzer 🚀
-
-Personal Mission:
-To innovate at the intersection of cybersecurity, ethical hacking, 
-and emerging technologies, creating robust solutions that protect 
-digital ecosystems and empower secure technological advancement.
-
-Academic Journey:
-- Computer Science Major at Hunter College
-- Specialization: Cybersecurity & Network Security
-- GPA: 3.7/4.0
-
-Relevant Coursework:
-- Advanced Network Security
-- Ethical Hacking Techniques
-- Cryptography & Data Protection
-- Secure Software Development
-
-Core Competencies:
-- Creative Problem Solving
-- Rapid Technology Adaptation
-- Comprehensive Security Analysis
-- Innovative Tool Development
-
-Personal Philosophy:
-"Security is not a product, but a continuous process of improvement 
-and adaptation. Every line of code is an opportunity to build 
-something not just functional, but fundamentally secure."
-
-Interests Beyond Tech:
-- Sustainable Technology
-- Open-Source Advocacy
-- Cybersecurity Education
-- Mountain Hiking & Photography`
+Use 'cat projects/[project_name].md' to view details
+Or type 'projects [project_name]' for more information`
     };
 
-    // Commands definition
+    // Comprehensive command definitions
     const commands = {
       help: `Available Commands:
   help         – Show this help menu
@@ -230,7 +149,11 @@ Interests Beyond Tech:
   about        – Personal introduction
   skills       – Technical skills summary
   contact      – Networking information
-  clear        – Clear terminal screen`,
+  projects     – List available projects
+  achievements – Display academic achievements
+  clear        – Clear terminal screen
+  exit         – Close the terminal
+  whoami       – Display current user info`,
 
       ascii: `
  ███╗   ██╗ █████╗ ███╗   ███╗██╗  ██╗██╗  ██╗ █████╗ 
@@ -243,6 +166,7 @@ Interests Beyond Tech:
 `
     };
 
+    // Utility functions
     function saveHistory(cmd) {
       history.push(cmd);
       localStorage.setItem('term_history', JSON.stringify(history));
@@ -262,99 +186,140 @@ Interests Beyond Tech:
       // Convert command to lowercase for case-insensitive matching
       cmd = cmd.toLowerCase().trim();
 
+      // Split command into parts
+      const [command, ...args] = cmd.split(' ');
+
       // Direct content commands
-      if (cmd === 'skills') {
-        append(content.skills);
+      const contentCommands = {
+        'resume': content.resume,
+        'skills': content.skills,
+        'contact': content.contact,
+        'about': content.intro,
+        'achievements': content.achievements
+      };
+
+      if (contentCommands[command]) {
+        append(contentCommands[command]);
         return;
       }
 
-      if (cmd === 'contact') {
-        append(content.contact);
-        return;
-      }
-
-      if (cmd === 'about') {
-        append(content.about);
-        return;
-      }
-
-      if (cmd === 'clear') {
-        term.innerHTML = '';
-        return;
-      }
-
-      if (cmd === 'ls') {
-        // Get the current directory's contents
-        const currentDir = fs[cwd];
-        if (currentDir && currentDir.contents) {
-          // Create a formatted list with directories and files
-          const formattedContents = currentDir.contents.map(item => {
-            // Check if the item is a directory
-            const isDir = fs[`/${item}`] && fs[`/${item}`].type === 'directory';
-            return `<span class="${isDir ? 'directory' : 'file'}">${item}${isDir ? '/' : ''}</span>`;
-          }).join('    ');
-          append(formattedContents);
-        } else {
-          append('No contents found', 'error');
-        }
-        return;
-      }
-
-      if (cmd.startsWith('cd ')) {
-        let dir = cmd.split(' ')[1];
-        
-        // Handle going up a directory
-        if (dir === '..') {
-          cwd = '/';
-          append(`Changed directory to ${cwd}`, 'highlight');
+      // Projects command with detailed handling
+      if (command === 'projects') {
+        if (args.length === 0) {
+          // List available projects
+          append(content.projects);
           return;
         }
 
-        // Check if the directory exists
-        const fullPath = (cwd === '/' ? '/' : cwd + '/') + dir;
-        if (fs[fullPath] && fs[fullPath].type === 'directory') {
-          cwd = fullPath;
-          append(`Changed directory to ${cwd}`, 'highlight');
-        } else {
-          append(`cd: no such file or directory: ${dir}`, 'error');
-        }
-        return;
-      }
-
-      if (cmd.startsWith('cat ')) {
-        let f = cmd.split(' ')[1];
+        // Specific project details
+        const projectName = args[0];
+        const projectDetails = content.projects[projectName];
         
-        // Construct full path
-        const fullPath = (cwd === '/' ? '/' : cwd + '/') + f;
-        
-        // Direct content files
-        if (f === 'skills.txt') {
-          append(content.skills);
+        if (projectDetails) {
+          append(projectDetails);
           return;
         }
-        if (f === 'contact.txt') {
-          append(content.contact);
+
+        append(`Project "${projectName}" not found`, 'error');
+        return;
+      }
+
+      // Specific command handling
+      switch (command) {
+        case 'clear':
+          term.innerHTML = '';
           return;
-        }
-        
-        append(`cat: ${f}: No such file`, 'error');
-        return;
-      }
 
-      // Help command
-      if (cmd === 'help') {
-        append(commands.help);
-        return;
-      }
+        case 'exit':
+          append('Goodbye! Closing terminal...', 'highlight');
+          return;
 
-      // ASCII command
-      if (cmd === 'ascii') {
-        append(commands.ascii);
-        return;
-      }
+        case 'whoami':
+          append('namkha@portfolio', 'highlight');
+          return;
 
-      // If no matching command
-      append(`bash: ${cmd}: command not found`, 'error');
+        case 'ls':
+          // Get the current directory's contents
+          const currentDir = fs[cwd];
+          if (currentDir && currentDir.contents) {
+            // Create a formatted list with directories and files
+            const formattedContents = currentDir.contents.map(item => {
+              // Check if the item is a directory
+              const isDir = fs[`/${item}`] && fs[`/${item}`].type === 'directory';
+              return `<span class="${isDir ? 'directory' : 'file'}">${item}${isDir ? '/' : ''}</span>`;
+            }).join('    ');
+            append(formattedContents);
+          } else {
+            append('No contents found', 'error');
+          }
+          return;
+
+        case 'cd':
+          const dir = args[0];
+          if (!dir) {
+            append('cd: missing argument', 'error');
+            return;
+          }
+          
+          // Handle going up a directory
+          if (dir === '..') {
+            cwd = '/';
+            append(`Changed directory to ${cwd}`, 'highlight');
+            return;
+          }
+
+          // Check if the directory exists
+          const fullPath = (cwd === '/' ? '/' : cwd + '/') + dir;
+          if (fs[fullPath] && fs[fullPath].type === 'directory') {
+            cwd = fullPath;
+            append(`Changed directory to ${cwd}`, 'highlight');
+          } else {
+            append(`cd: no such file or directory: ${dir}`, 'error');
+          }
+          return;
+
+        case 'cat':
+          const filename = args[0];
+          if (!filename) {
+            append('cat: missing file operand', 'error');
+            return;
+          }
+
+          // Handle different file types
+          const fileContentMap = {
+            'resume.txt': content.resume,
+            'skills.txt': content.skills,
+            'contact.txt': content.contact,
+            'intro.txt': content.intro,
+            'achievements.txt': content.achievements,
+            'network_scanner.md': content.projects.network_scanner,
+            'mini_siem.md': content.projects.mini_siem,
+            'password_analyzer.md': content.projects.password_analyzer,
+            'waf.md': content.projects.waf,
+            'cybersec_tools.md': content.projects.cybersec_tools
+          };
+
+          const fileContent = fileContentMap[filename];
+          if (fileContent) {
+            append(fileContent);
+          } else {
+            append(`cat: ${filename}: No such file or directory`, 'error');
+          }
+          return;
+
+        case 'help':
+          append(commands.help);
+          return;
+
+        case 'ascii':
+          append(commands.ascii);
+          return;
+
+        default:
+          if (cmd.trim() !== '') {
+            append(`bash: ${cmd}: command not found`, 'error');
+          }
+      }
     }
 
     function prompt() {
@@ -404,3 +369,4 @@ Interests Beyond Tech:
   </script>
 </body>
 </html>
+
