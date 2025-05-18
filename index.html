@@ -4,132 +4,136 @@
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
   <title>Namkha's Terminal Portfolio</title>
+  <link rel="icon" type="image/png" sizes="32x32" href="cyber-favicon-green.png">
   <style>
-    body {
-      background-color: black;
-      color: green;
-      font-family: monospace;
-      margin: 0;
-      padding: 10px;
+    html, body {
+      margin:0; padding:0;
+      width:100%; height:100%;
+      background:#000; color:#0f0;
+      font-family:monospace;
+      overflow:hidden;
     }
-    #output {
-      white-space: pre-wrap;
-      overflow-y: auto;
-      max-height: calc(100vh - 50px);
+    #terminal {
+      box-sizing:border-box;
+      padding:12px;
+      height:100vh;
+      overflow-y:auto;
+      white-space:pre-wrap;
+      line-height:1.4;
+      font-size:1rem;
     }
-    #input {
-      background: black;
-      color: green;
-      border: none;
-      width: 100%;
-      font-family: monospace;
+    .prompt {
+      display:flex; align-items:center; margin-top:4px;
     }
-    .link {
-      color: cyan;
-      text-decoration: underline;
-      cursor: pointer;
+    .prompt-user { margin-right:6px; }
+    .prompt-symbol { margin-right:6px; }
+    .prompt-input {
+      flex:1; background:transparent; border:none;
+      color:#0f0; font-family:inherit; font-size:inherit;
+      outline:none;
     }
-    .link:hover {
-      color: white;
+    .cursor {
+      width:8px; height:1em; background:#0f0;
+      margin-left:2px; animation:blink 1s steps(2,start) infinite;
     }
+    @keyframes blink {
+      0%,50% {opacity:1;} 51%,100% {opacity:0;}
+    }
+    a, a:visited {
+      color:#0f0; text-decoration:underline;
+    }
+    a:hover { color:#fff; text-decoration:none; }
   </style>
 </head>
 <body>
-  <div id="output"></div>
-  <input type="text" id="input" autofocus>
-
+  <div id="terminal"></div>
   <script>
-  // Content library
-  const content = {
-    help: `Available commands:
-  help         - Show this help menu
-  resume       - View resume details and download options
-  skills       - Show technical skills
-  contact      - Display contact information
-  about        - Personal introduction
-  achievements - Academic and professional achievements
-  clear        - Clear the screen`,
+  (function(){
+    const term = document.getElementById('terminal');
+    let history = JSON.parse(localStorage.getItem('term_history')||'[]');
+    let histIndex = history.length;
 
-    resume: `Resume for Namkha Tashi Oedzer
+    // Enhanced filesystem
+    let cwd = '/';
+    const fs = {
+      '/': ['resume.txt', 'projects', 'skills.txt', 'contact.txt', 'about.txt', 'achievements.txt'],
+      '/projects': ['network_scanner.md', 'mini_siem.md', 'password_analyzer.md', 'waf.md', 'cybersec_tools.md']
+    };
 
-Download Options:
-- [PDF] Full Resume: <download-pdf>
-- [DOCX] Editable Version: <download-docx>
+    // Comprehensive file contents
+    const files = {
+      'resume.txt': `Resume - Namkha Tashi Oedzer
 
-Resume Overview:
+Download Versions:
+- <a href="resume.pdf" target="_blank">Resume PDF</a>
+- <a href="resume.docx" target="_blank">Resume DOCX</a>
+
+Professional Summary:
+Computer Science student specializing in Cybersecurity
+Passionate about developing innovative security solutions
+
 Education:
-- Computer Science Major at Hunter College
-- Specialization in Cybersecurity
+- Hunter College
+- Major: Computer Science
+- Specialization: Cybersecurity
 
 Key Projects:
-- Network Vulnerability Scanner
-- Mini SIEM Project
-- Password Security Analyzer
-- Web Application Firewall
+1. Network Vulnerability Scanner
+2. Mini SIEM Project
+3. Password Security Analyzer
+4. Web Application Firewall`,
 
-Professional Experience:
-- Developed multiple security-focused projects
-- Contributed to open-source security tools
-- Intern, Cybersecurity Research Lab`,
-
-    skills: `Technical Skills:
-Cybersecurity Domains:
-- Network Security Analysis
-- Penetration Testing
-- Security Tool Development
-- Threat Detection & Mitigation
+      'skills.txt': `Technical Skills Breakdown:
 
 Programming Languages:
 - Python (Advanced)
-- JavaScript/Node.js
-- Bash Scripting
+  • Network scripting
+  • Security tool development
+- JavaScript/Node.js (Intermediate)
+  • Web application security
+- Bash Scripting (Advanced)
+  • System automation
 - C++ (Intermediate)
+  • Performance-critical applications
 
-Tools & Technologies:
+Cybersecurity Tools:
 - Kali Linux
 - Nmap
 - Burp Suite
 - Wireshark
-- Metasploit
+- Metasploit (Basic)
 - Docker
 - Git
 - ELK Stack`,
 
-    contact: `Contact Information:
-Email:     <email>oedzernamkha@gmail.com</email>
-GitHub:    <link>https://github.com/namkha-yolo</link>
-LinkedIn:  <link>https://linkedin.com/in/namkha-tashi-oedzer</link>
-Portfolio: <link>https://namkha.dev</link>
+      'contact.txt': `Contact Information:
+
+Email: <a href="mailto:oedzernamkha@gmail.com">oedzernamkha@gmail.com</a>
+GitHub: <a href="https://github.com/namkha-yolo" target="_blank">github.com/namkha-yolo</a>
+LinkedIn: <a href="https://linkedin.com/in/namkha-tashi-oedzer" target="_blank">linkedin.com/in/namkha-tashi-oedzer</a>
+Portfolio: <a href="https://namkha.dev" target="_blank">namkha.dev</a>
 
 Preferred Communication:
-- Professional inquiries via LinkedIn
-- Open-source collaboration through GitHub
-- Technical discussions via email`,
+- LinkedIn for professional inquiries
+- GitHub for open-source collaboration
+- Email for direct communication`,
 
-    about: `About Namkha Tashi Oedzer
+      'about.txt': `About Namkha Tashi Oedzer
 
-🚀 Personal Mission Statement:
-To innovate at the intersection of cybersecurity, 
-ethical hacking, and emerging technologies, creating 
-robust solutions that protect digital ecosystems 
-and empower secure technological advancement.
+Computer Science student at Hunter College
+Specializing in Cybersecurity and Network Security
 
-Academic Journey:
-- Computer Science Major at Hunter College
-- Specialization: Cybersecurity & Network Security
-- GPA: 3.7/4.0
+Core Interests:
+- Ethical Hacking
+- Security Tool Development
+- Open Source Contributions
+- Innovative Technology Solutions
 
-Core Competencies:
-- Creative Problem Solving
-- Rapid Technology Adaptation
-- Comprehensive Security Analysis
-- Innovative Tool Development
+Personal Mission:
+Create robust security solutions that protect 
+digital ecosystems and drive technological innovation.`,
 
-Personal Philosophy:
-"Security is not a product, but a continuous process 
-of improvement and adaptation."`,
-
-    achievements: `🏆 Academic & Professional Achievements
+      'achievements.txt': `Academic & Professional Achievements:
 
 Cybersecurity Competitions:
 - 2nd Place, HackHunter Collegiate Cybersecurity Challenge
@@ -142,92 +146,196 @@ Academic Honors:
 - Research Grant for Cybersecurity Innovation Project
 
 Professional Development:
-- Completed Advanced Network Security Certification
-- Speaker at Hunter College Cybersecurity Symposium
-- Intern, Cybersecurity Research Lab`
-  };
+- Advanced Network Security Certification
+- Speaker at Cybersecurity Symposium
+- Intern, Cybersecurity Research Lab`,
 
-  // Get DOM elements
-  const output = document.getElementById('output');
-  const input = document.getElementById('input');
+      'projects/network_scanner.md': `Network Vulnerability Scanner
 
-  // Function to display output with interactive elements
-  function displayOutput(text) {
-    // Create a temporary div to handle rich content
-    const tempDiv = document.createElement('div');
-    tempDiv.innerHTML = text.replace(/<download-pdf>/g, '<span class="link" data-download="pdf">Download PDF</span>')
-                             .replace(/<download-docx>/g, '<span class="link" data-download="docx">Download DOCX</span>')
-                             .replace(/<email>(.+?)<\/email>/g, '<span class="link" data-email="$1">$1</span>')
-                             .replace(/<link>(.+?)<\/link>/g, '<span class="link" data-link="$1">$1</span>');
-    
-    // Add event listeners to interactive elements
-    tempDiv.querySelectorAll('.link').forEach(link => {
-      link.addEventListener('click', () => {
-        if (link.dataset.download) {
-          // Simulate download
-          const format = link.dataset.download;
-          displayOutput(`Downloading resume as ${format.toUpperCase()}...`);
-          // In a real implementation, you'd trigger actual file download
+GitHub: https://github.com/namkha-yolo/network-scanner
+
+Description:
+Advanced network mapping and security assessment tool
+- Uses Python and Nmap
+- Generates comprehensive HTML reports
+- Supports custom configuration flags
+- CLI-based interface for flexible scanning`,
+
+      'projects/mini_siem.md': `Mini SIEM (Security Information and Event Management)
+
+GitHub: https://github.com/namkha-yolo/mini-siem-elk
+
+Description:
+Docker-based security monitoring solution
+- ELK Stack implementation
+- Suricata for intrusion detection
+- Real-time log analysis
+- Automated Slack alerts for security incidents`,
+
+      'projects/password_analyzer.md': `Password Security Analyzer
+
+GitHub: https://github.com/namkha-yolo/password-analyzer
+
+Description:
+Comprehensive password security assessment tool
+- Strength evaluation
+- Breach database lookup
+- Entropy-based scoring
+- Secure CLI-based password recommendations`,
+
+      'projects/waf.md': `Web Application Firewall
+
+GitHub: https://github.com/namkha-yolo/web-waf
+
+Description:
+Intelligent web traffic filtering proxy
+- Blocks SQLi and XSS attacks
+- Python-based implementation
+- Pattern-based security rules
+- Lightweight and configurable`,
+
+      'projects/cybersec_tools.md': `Cybersecurity Research & Tools
+
+Ongoing Projects and Research:
+- Continuous exploration of emerging security technologies
+- Development of open-source security tools
+- Active contributor to cybersecurity community
+
+Research Focus Areas:
+- Machine Learning in Cybersecurity
+- Automated Threat Detection
+- Zero-Day Vulnerability Research`
+    };
+
+    // Enhanced commands
+    const commands = {
+      help: `Available commands:
+  help       – show this help
+  ascii      – show ASCII banner
+  ls         – list files/directories
+  cd <dir>   – change directory (.. to go up)
+  cat <file> – view file contents
+  resume     – view resume details
+  about      – personal introduction
+  skills     – technical skills summary
+  projects   – list project details
+  contact    – networking information
+  achievements – academic achievements
+  clear      – clear the screen
+  whoami     – display current user`,
+      
+      ascii: `   _   _                          _       
+  | \\ | |_   _ _ __   ___ _ __ __| | ___  
+  |  \\| | | | | '_ \\ / _ \\ '__/ _\` |/ _ \\ 
+  | |\\  | |_| | |_) |  __/ | | (_| |  __/ 
+  |_| \\_|\\__, | .__/ \\___|_|  \\__,_|\\___| 
+          |___/|_|                         `,
+      
+      about: `Namkha Tashi Oedzer
+CS Student @ Hunter College
+Cybersecurity enthusiast & ethical hacker.`,
+      
+      projects: `Projects:
+• Network Vulnerability Scanner – https://github.com/namkha-yolo/network-scanner
+• Mini SIEM on ELK              – https://github.com/namkha-yolo/mini-siem-elk
+• Password Security Analyzer    – https://github.com/namkha-yolo/password-analyzer
+• Web Application Firewall      – https://github.com/namkha-yolo/web-waf`,
+
+      whoami: 'namkha@portfolio: Cybersecurity Student & Ethical Hacker'
+    };
+
+    function saveHistory(cmd) {
+      history.push(cmd);
+      localStorage.setItem('term_history', JSON.stringify(history));
+      histIndex = history.length;
+    }
+
+    function append(text='') {
+      term.innerHTML += text.replace(/\n/g,'<br/>') + '<br/>';
+      term.scrollTop = term.scrollHeight;
+    }
+
+    function handle(cmd) {
+      if (cmd === 'clear') {
+        term.innerHTML = '';
+        return;
+      }
+      if (cmd === 'resume') return append(files['resume.txt']);
+      if (cmd === 'about') return append(files['about.txt']);
+      if (cmd === 'skills') return append(files['skills.txt']);
+      if (cmd === 'contact') return append(files['contact.txt']);
+      if (cmd === 'achievements') return append(files['achievements.txt']);
+      if (cmd === 'whoami') return append(commands['whoami']);
+      
+      if (cmd.startsWith('cd ')) {
+        let dir = cmd.split(' ')[1];
+        if (dir==='..') { cwd = '/'; }
+        else if (fs[cwd+'/'+dir]) cwd += (cwd==='/'?'':'/')+dir;
+        else return append(`cd: no such file or directory: ${dir}`);
+        return;
+      }
+      if (cmd==='ls') {
+        const list = fs[cwd] || [];
+        return append(list.join('   '));
+      }
+      if (cmd.startsWith('cat ')) {
+        let f = cmd.split(' ')[1];
+        let path = (cwd==='/'?'/':cwd+'/')+f;
+        
+        // Check if file exists in current directory or is a special file
+        if (files[path] || files[f]) {
+          return append(files[path] || files[f]);
         }
-        if (link.dataset.email) {
-          window.open(`mailto:${link.dataset.email}`);
+        return append(`cat: ${f}: No such file`);
+      }
+      if (commands[cmd]) return append(commands[cmd]);
+      if (cmd.trim()!=='') return append(`bash: ${cmd}: command not found`);
+    }
+
+    function prompt() {
+      const line = document.createElement('div');
+      line.className='prompt';
+      line.innerHTML =
+        `<span class="prompt-user">namkha@portfolio${cwd==='/'?'':' '+cwd}</span>`+
+        `<span class="prompt-symbol">$</span>`+
+        `<input class="prompt-input" autofocus />`+
+        `<span class="cursor"></span>`;
+      term.appendChild(line);
+
+      const input = line.querySelector('input');
+      input.addEventListener('keydown', e=>{
+        if (e.key==='Enter') {
+          const cmd = input.value.trim();
+          input.disabled = true;
+          line.querySelector('.cursor').remove();
+          append(`namkha@portfolio${cwd==='/'?'':' '+cwd} $ ${cmd}`);
+          saveHistory(cmd);
+          handle(cmd.toLowerCase());
+          prompt();
         }
-        if (link.dataset.link) {
-          window.open(link.dataset.link, '_blank');
+        // history navigation
+        if (e.key==='ArrowUp') {
+          if (histIndex>0) histIndex--;
+          input.value = history[histIndex]||'';
+        }
+        if (e.key==='ArrowDown') {
+          if (histIndex<history.length-1) histIndex++;
+          input.value = history[histIndex]||'';
         }
       });
+      input.focus();
+    }
+
+    term.addEventListener('click', ()=> {
+      const inp = term.querySelector('input.prompt-input:enabled');
+      if (inp) inp.focus();
     });
 
-    // Append the processed content
-    output.appendChild(tempDiv);
-    output.scrollTop = output.scrollHeight;
-  }
-
-  // Input event listener
-  input.addEventListener('keypress', function(e) {
-    if (e.key === 'Enter') {
-      const command = this.value.toLowerCase().trim();
-      
-      // Echo the command
-      displayOutput(`> ${this.value}`);
-
-      // Handle commands
-      switch(command) {
-        case 'help':
-          displayOutput(content.help);
-          break;
-        case 'resume':
-          displayOutput(content.resume);
-          break;
-        case 'skills':
-          displayOutput(content.skills);
-          break;
-        case 'contact':
-          displayOutput(content.contact);
-          break;
-        case 'about':
-          displayOutput(content.about);
-          break;
-        case 'achievements':
-          displayOutput(content.achievements);
-          break;
-        case 'clear':
-          output.innerHTML = '';
-          break;
-        default:
-          displayOutput(`Command not found: ${command}`);
-      }
-
-      // Clear input
-      this.value = '';
-    }
-  });
-
-  // Initial welcome message
-  displayOutput('Welcome to Namkha\'s Portfolio Terminal');
-  displayOutput('Type "help" to see available commands');
+    // Initial banner & prompt
+    append(commands.ascii);
+    append("Type 'help' and press Enter.");
+    prompt();
+  })();
   </script>
 </body>
 </html>
-
-
